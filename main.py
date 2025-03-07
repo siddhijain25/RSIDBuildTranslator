@@ -1,4 +1,4 @@
-from cli import create_parser, add_mode_specific_args
+from cli import create_parser, create_mode_specific_args
 from modes import mode_rsid, mode_chrpos37, mode_chrpos38
 
 
@@ -9,7 +9,7 @@ def main():
 
     # Step 2: Recreate parser with mode-specific arguments
     parser = create_parser()
-    parser = add_mode_specific_args(parser, base_args)
+    parser = create_mode_specific_args(parser, base_args)
     args = parser.parse_args()  # Fully parse arguments
 
     # Select the correct mode
