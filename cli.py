@@ -30,27 +30,33 @@ def create_mode_specific_args(parser, args):
     """Dynamically adds mode-specific arguments based on --mode value."""
 
     if args.mode == "rsid":
-        parser.add_argument("-rs", "--rsid_col", help="Name of column with rsids")
+        parser.add_argument(
+            "-rs", "--rsid_col", help="Name of column with rsids", required=True
+        )
     elif args.mode == "chrpos37":
         parser.add_argument(
             "-chr37",
             "--chr_col_b37",
             help="Name of column with chromosome in build GRCh37",
+            required=True,
         )
         parser.add_argument(
             "-pos37",
             "--pos_col_b37",
             help="Name of column with position in build GRCh37",
+            required=True,
         )
     elif args.mode == "chrpos38":
         parser.add_argument(
             "-chr38",
             "--chr_col_b38",
             help="Name of column with chromosome in build GRCh38",
+            required=True,
         )
         parser.add_argument(
             "-pos38",
             "--pos_col_b38",
             help="Name of column with position in build GRCh38",
+            required=True,
         )
     return parser
