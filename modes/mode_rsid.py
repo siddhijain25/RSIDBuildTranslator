@@ -1,5 +1,8 @@
+import pandas as pd
+import sqlite3
+
+
 def run(args):
-    """Handles Mode 1 logic."""
-    print(f"Mode 1: Processing {args.input} -> {args.output}")
-    if args.rsid_col:
-        print(f"rsid_col: {args.rsid_col}")
+    """Handles Mode "rsid" logic."""
+    df = pd.read_csv(args.input)
+    gtex_file =sqlite3.connect("data/GTEX_v10.sqlite")
