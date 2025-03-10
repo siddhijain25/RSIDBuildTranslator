@@ -10,5 +10,9 @@ def run(args):
         logger.info("Input file read successfully.")
     except Exception as e:
         logger.error(f"An error has occured: {e}")
+    try:
+        gtex_file =sqlite3.connect("data/GTEX_v10.sqlite")
+        logger.info("GTEx database read successfully.")
+    except Exception as e:
+        logger.error(f"An error has occured: {e}")
     
-    gtex_file =sqlite3.connect("data/GTEX_v10.sqlite")
