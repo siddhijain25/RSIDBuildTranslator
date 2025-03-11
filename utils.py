@@ -60,8 +60,8 @@ def query_to_df(query, ids_to_search, cur, input_data, rsid_col, lookup_column):
 
     final_df = pd.merge(
         input_data, results, how="left", left_on=rsid_col, right_on=lookup_column
-    ).drop(lookup_column, 1)
-    
+    ).drop(columns=lookup_column)
+
     return final_df
 
 
