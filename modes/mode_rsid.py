@@ -26,7 +26,7 @@ def run(args):
 
             # Construct and execute query safely
             query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
-            print(query)
+            # print(query)
             gtex_cur.execute(query, ids_to_search)
             results = gtex_cur.fetchall()
 
@@ -41,4 +41,5 @@ def make_checks(ids_to_search, rsid_col):
     if not all(re.match(r"^rs[0-9]+$", i) for i in ids_to_search):
         logger.warning(f"IDs in {rsid_col} do not match rsID format")
         return False
+    logger.info(f"{rsid_col} passed checks ✨")
     return True
