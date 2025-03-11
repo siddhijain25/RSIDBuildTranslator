@@ -15,6 +15,10 @@ def run(args):
     ]
     ids_to_search = input_data[args.rsid_col].tolist()
 
+    # Perform checks on ids_to_search
+    if not make_checks(ids_to_search, args.rsid_col):
+        return
+
     # Load database safely
     with load_gtex_data() as gtex_con:
         if gtex_con:
@@ -28,3 +32,12 @@ def run(args):
 
     for row in results:
         print(row)
+
+
+def make_checks(ids_to_search, rsid_col):
+    if not ids_to_search:
+        logger.warning(f"{rsid_col} is empty.")
+        return False
+    if not all(re.match(r"^rs0-9", i) for i in ids_to_search):
+        logger.warning(f"IDs in {rsid_col} do not match rsID format")
+        return False

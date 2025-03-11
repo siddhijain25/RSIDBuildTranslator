@@ -48,7 +48,7 @@ def get_query(table_name, ids_to_search, lookup_column):
     return query
 
 
-# ###########
+# # ###########
 # import sqlite3
 
 # # Connect to the database (replace 'GTEX_file.db' with your actual database path)
