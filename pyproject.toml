@@ -1,0 +1,9 @@
+[tool.flake8]
+extend-ignore = ["E501", "F401"]
+max-line-length = 88
+extend-exclude = "venv"
+
+[tool.black]
+line-length = 88
+
+#try using ruff instead of these
