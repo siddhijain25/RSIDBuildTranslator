@@ -16,7 +16,7 @@ def run(args):
     ]
     ids_to_search = input_data[args.rsid_col].tolist()
 
-    query = get_query(GTEx_lookup, ids_to_search, rsid_dbSNP155)
+    query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
 
     gtex_cur.execute(query)
     results = gtex_cur.fetchall()
