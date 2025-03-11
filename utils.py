@@ -8,11 +8,11 @@ def read_input_file(path):
         df = pd.read_table(path, sep=None, engine="python")
 
         if df.empty:
-            logger.warning("Input file is empty.")
+            logger.warning(f"Input file '{path}' is empty.")
         elif len(df.columns) < 2:
-            logger.warning("Input file contains less than 2 columns.")
+            logger.warning(f"Input file '{path}' contains less than 2 columns.")
         else:
-            logger.info("Input file read successfully.")
+            logger.info(f"Input file '{path}' read successfully.")
         return df
     except Exception as e:
         logger.error(f"An error has occured while reading the input file: {e}")
