@@ -1,7 +1,7 @@
 import pandas as pd
 import sqlite3
 from cli import logger
-from utils import read_input_file, load_gtex_data, get_query
+from utils import read_input_file, load_gtex_data, get_query, query_to_df
 import re
 
 
@@ -26,12 +26,12 @@ def run(args):
 
             # Construct and execute query safely
             query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
-            # print(query)
-            gtex_cur.execute(query, ids_to_search)
-            results = gtex_cur.fetchall()
 
-    for row in results:
-        print(row)
+            results = query_to_df(query, ids_to_search, gtex_con, gtex_cur)
+            print(results)
+            # print(query)
+            # gtex_cur.execute(query, ids_to_search)
+            # results = gtex_cur.fetchall()
 
 
 def make_checks(ids_to_search, rsid_col):

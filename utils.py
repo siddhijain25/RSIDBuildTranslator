@@ -48,7 +48,20 @@ def get_query(table_name, ids_to_search, lookup_column):
     return query
 
 
-# # ###########
+def query_to_df(query, ids_to_search, con, cur):
+    cur.execute(query, ids_to_search)
+    columns = cur.description
+    results = []
+    for value in cur.fetchall():
+        tmp = {}
+        for index, column in enumerate(value):
+            tmp[columns[index][0]] = column
+        results.append(tmp)
+    con.close()
+    return results
+
+
+# # # ###########
 # import sqlite3
 
 # # Connect to the database (replace 'GTEX_file.db' with your actual database path)
@@ -64,8 +77,17 @@ def get_query(table_name, ids_to_search, lookup_column):
 # """
 # cursor = conn.cursor()
 # cursor.execute(query, rsid_batch)
-# results = cursor.fetchall()
-# conn.close()
+# # results = cursor.fetchall()
+# # conn.close()
+
+
+# columns = cursor.description
+# result = []
+# for value in cursor.fetchall():
+#     tmp = {}
+#     for index, column in enumerate(value):
+#         tmp[columns[index][0]] = column
+#     result.append(tmp)
 
 # # Print the results
 # for row in results:
