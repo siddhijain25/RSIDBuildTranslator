@@ -63,10 +63,13 @@ def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
     if lookup_column == "rsid_dbSNP155":
         results_df[["chr37", "pos37"]] = results_df["chrpos37"].str.split("_", expand=True)
         results_df[["chr38", "pos38"]] = results_df["chrpos38"].str.split("_", expand=True)
+        results_df.drop(columns=["chrpos37","chrpos38"], inplace=True)
     elif lookup_column == "chrpos37":
         results_df[["chr38", "pos38"]] = results_df["chrpos38"].str.split("_", expand=True)
+        results_df.drop(columns=["chrpos38"], inplace=True)
     elif lookup_column == "chrpos38":
         results_df[["chr37", "pos37"]] = results_df["chrpos37"].str.split("_", expand=True)
+        results_df.drop(columns=["chrpos37"], inplace=True)
 
     final_df = pd.merge(
         input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
