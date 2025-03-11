@@ -6,7 +6,6 @@ from cli import logger
 def read_input_file(path):
     try:
         df = pd.read_table(path, sep=None, engine="python")
-
         if df.empty:
             logger.warning(f"Input file '{path}' is empty.")
         elif len(df.columns) < 2:
@@ -48,7 +47,7 @@ def get_query(table_name, ids_to_search, lookup_column):
     return query
 
 
-def query_to_df(query, ids_to_search, cur, input_data, rsid_col, lookup_column):
+def query_to_df(query, ids_to_search, cur):
     cur.execute(query, ids_to_search)
     columns = [desc[0] for desc in cur.description]
     results = []
@@ -57,11 +56,21 @@ def query_to_df(query, ids_to_search, cur, input_data, rsid_col, lookup_column):
         results.append(tmp)
 
     results_df = pd.DataFrame(results)
+    return results_df
+
+
+def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
+    if lookup_column == "rsid_dbSNP155":
+        results_df["chr37", "pos37"] = results_df["chrpos37"].str.split("-")
+        results_df["chr38", "pos38"] = results_df["chrpos38"].str.split("-")
+    elif lookup_column == "chrpos37":
+        results_df["chr38", "pos38"] = results_df["chrpos38"].str.split("-")
+    elif lookup_column == "chrpos38":
+        results_df["chr37", "pos37"] = results_df["chrpos37"].str.split("-")
 
     final_df = pd.merge(
         input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
     ).drop(columns=lookup_column)
-
     return final_df
 
 
