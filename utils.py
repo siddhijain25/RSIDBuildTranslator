@@ -56,10 +56,10 @@ def query_to_df(query, ids_to_search, cur, input_data, rsid_col, lookup_column):
         tmp = {columns[index]: column for index, column in enumerate(value)}
         results.append(tmp)
 
-    #results_df = pd.DataFrame(results)
+    results_df = pd.DataFrame(results)
 
     final_df = pd.merge(
-        input_data, results, how="left", left_on=rsid_col, right_on=lookup_column
+        input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
     ).drop(columns=lookup_column)
 
     return final_df
