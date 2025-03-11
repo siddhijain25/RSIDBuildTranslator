@@ -57,7 +57,6 @@ def query_to_df(query, ids_to_search, con, cur):
         for index, column in enumerate(value):
             tmp[columns[index][0]] = column
         results.append(tmp)
-    con.close()
     return results
 
 
