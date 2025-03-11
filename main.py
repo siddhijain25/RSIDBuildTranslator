@@ -19,7 +19,7 @@ def main():
     mode_map = {
         "rsid": mode_rsid.run,
         "chrpos37": mode_chrpos37.run,
-        "chrpos37": mode_chrpos38.run,
+        "chrpos38": mode_chrpos38.run,
     }
 
     selected_mode = mode_map.get(args.mode)

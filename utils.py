@@ -5,8 +5,8 @@ from cli import logger
 
 def read_input_file(path):
     try:
-        df = pd.read_table(path, sep=None, engine='python')
-        
+        df = pd.read_table(path, sep=None, engine="python")
+
         if df.empty:
             logger.warning("Input file is empty.")
         elif len(df.columns) < 2:
@@ -22,19 +22,28 @@ def read_input_file(path):
 def load_gtex_data():
     try:
         gtex_con = sqlite3.connect("data/GTEX_v10.db")
-        gtex_cur = gtex_con.cursor()
+        # gtex_cur = gtex_con.cursor()
         logger.info("GTEx database read successfully.")
-        return gtex_con, gtex_cur
+        return gtex_con  # , gtex_cur
     except Exception as e:
         logger.error(f"An error has occured while reading the GTEx database: {e}")
-        return None, None
+        return None  # , None
 
 
-def get_query(database, ids_to_search, lookup_column):
+def get_query(table_name, ids_to_search, lookup_column):
+
+    allowed_tables = {"GTEx_lookup"}
+    allowed_lookup_columns = {"rsid_dbSNP155", "chrpos37", "chrpos38"}
+
+    if table_name not in allowed_tables:
+        raise ValueError(f"Invalid table name: {table_name}")
+    if lookup_column not in allowed_lookup_columns:
+        raise ValueError(f"Invalid column name: {lookup_column}")
+
     # Create the SQL query dynamically
     query = f"""
-    SELECT * FROM {database} 
-    WHERE {lookup_column} IN ({', '.join(['?']*len(ids_to_search))})
+    SELECT * FROM {table_name}
+    WHERE {lookup_column} IN ({', '.join(['?'] * len(ids_to_search))})
     """
     return query
 

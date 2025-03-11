@@ -9,18 +9,21 @@ def run(args):
     """Handles Mode "rsid" logic."""
 
     input_data = read_input_file(args.input)
-    gtex_con, gtex_cur = load_gtex_data()
 
     input_data.columns = [
         re.sub(r"[^a-zA-Z0-9\_ ]", "", col) for col in input_data.columns
     ]
     ids_to_search = input_data[args.rsid_col].tolist()
 
-    query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
+    # Load database safely
+    with load_gtex_data() as gtex_con:
+        if gtex_con:
+            gtex_cur = gtex_con.cursor()
 
-    gtex_cur.execute(query)
-    results = gtex_cur.fetchall()
-    gtex_con.close()
+            # Construct and execute query safely
+            query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
+            gtex_cur.execute(query, ids_to_search)
+            results = gtex_cur.fetchall()
 
     for row in results:
         print(row)
