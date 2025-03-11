@@ -35,7 +35,7 @@ def run(args):
             results_df = query_to_df(query, ids_to_search, gtex_cur)
 
             final_df = cleanup_query_df(
-                results_df, input_data, args.rrsid_colsdi, "rsid_dbSNP155"
+                results_df, input_data, args.rsid_col, "rsid_dbSNP155"
             )
 
             print(final_df)
