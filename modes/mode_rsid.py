@@ -22,8 +22,9 @@ def run(args):
 
             # Construct and execute query safely
             query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
-            gtex_cur.execute(query, ids_to_search)
-            results = gtex_cur.fetchall()
+            print(query)
+            #gtex_cur.execute(query)
+            #results = gtex_cur.fetchall()
 
-    for row in results:
-        print(row)
+    # for row in results:
+    #     print(row)
