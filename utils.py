@@ -21,7 +21,7 @@ def read_input_file(path):
 
 def load_gtex_data():
     try:
-        gtex_con = sqlite3.connect("data/GTEX_v10.db")
+        gtex_con = sqlite3.connect("data/GTEx_v10.db")
         # gtex_cur = gtex_con.cursor()
         logger.info("GTEx database read successfully.")
         return gtex_con  # , gtex_cur
