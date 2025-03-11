@@ -38,6 +38,6 @@ def make_checks(ids_to_search, rsid_col):
     if not ids_to_search:
         logger.warning(f"{rsid_col} is empty.")
         return False
-    if not all(re.match(r"^rs0-9", i) for i in ids_to_search):
+    if not all(re.match(r"^rs[0-9]+$", i) for i in ids_to_search):
         logger.warning(f"IDs in {rsid_col} do not match rsID format")
         return False
