@@ -48,15 +48,15 @@ def get_query(table_name, ids_to_search, lookup_column):
     return query
 
 
-def query_to_df(query, ids_to_search, con, cur):
+def query_to_df(query, ids_to_search, cur, input_data, rsid_col, lookup_column):
     cur.execute(query, ids_to_search)
-    columns = cur.description
+    columns = [desc[0] for desc in cur.description]
     results = []
     for value in cur.fetchall():
-        tmp = {}
-        for index, column in enumerate(value):
-            tmp[columns[index][0]] = column
+        tmp = {columns[index]: column for index, column in enumerate(value)}
         results.append(tmp)
+
+    final_df=pd.merge(input_data,pd.DataFrame(results), how='left', on=[input_data[rsid_col],lookup_column])
     return pd.DataFrame(results)
 
 

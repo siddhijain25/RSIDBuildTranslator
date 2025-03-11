@@ -27,7 +27,7 @@ def run(args):
             # Construct and execute query safely
             query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
 
-            results = query_to_df(query, ids_to_search, gtex_con, gtex_cur)
+            results = query_to_df(query, ids_to_search, gtex_cur, input_data, args.rsid_col, "rsid_dbSNP155")
             print(results)
             # print(query)
             # gtex_cur.execute(query, ids_to_search)
