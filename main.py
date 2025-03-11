@@ -13,7 +13,7 @@ def main():
     args = parser.parse_args()  # Fully parse arguments
 
     # parser.print_help()
-    logger.info(f"Running tool in mode: {args.mode}")
+    logger.info(f"Running tool in mode: '{args.mode}'")
 
     # Select the correct mode
     mode_map = {
