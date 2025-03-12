@@ -145,7 +145,7 @@ def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
     col_to_split (str): Name of column to be split into 2.
     new_col_1 (str): Name of new column for 1st part of str.split().
     new_col_2 (str): Name of new column for 2nd part of str.split().
-    
+
     Returns:
     df (pd.DataFrame): Returns dataframe with 2 new columns and dropped col_to_split.
     """
