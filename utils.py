@@ -167,7 +167,12 @@ def write_ouput_file(final_df, path):
     None
     """
     try:
-        _, ext = os.path.splitext(path)
+        dir, file = os.path.split(path)
+        _filename, ext = os.path.splitext(file)
+        #check if path exists, else mkdir
+        if dir and not os.path.isdir(dir):
+            logger.error(f"Output file path {dir} does not exist.")
+            return
         if not ext:
             logger.error(
                 f"Output file {path} does not have an extension.\nSupported extensions are .txt, .tsv, and .csv"
