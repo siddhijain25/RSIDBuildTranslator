@@ -7,6 +7,7 @@ from utils import (
     load_gtex_data,
     query_to_df,
     read_input_file,
+    write_ouput_file
 )
 
 
@@ -35,6 +36,7 @@ def run(args):
             final_df = cleanup_query_df(results_df, input_data, args.rsid_col, "rsid_dbSNP155")
 
             print(final_df)
+            write_ouput_file(final_df, args.output)
 
 
 def make_checks(ids_to_search, rsid_col):
