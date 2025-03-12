@@ -1,4 +1,5 @@
 [tool.ruff]
+line-length = 100
 exclude = ["venv/"]
 [tool.ruff.lint]
 select = [
