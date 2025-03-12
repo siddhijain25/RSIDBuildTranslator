@@ -156,6 +156,16 @@ def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
 
 
 def write_ouput_file(final_df, path):
+    """
+    Writes the final data to a file with the appropriate format based on the file extension.
+
+    Parameters:
+    final_df (pd.DataFrame): The DataFrame to be written to the file.
+    path (str): The file path as provided by the user.
+
+    Returns:
+    None
+    """
     try:
         _,ext=os.path.splitext(path)
         if not ext:
