@@ -31,7 +31,7 @@ def create_parser():
         "--exclude-ref-alt",
         dest="exclude_ref_alt",
         help="Flag to exclude printing reference and alternate alleles in output",
-        action="store_false",
+        action="store_true",
     )
 
     subparsers = parser.add_subparsers(dest="mode", help="subcommand help")
