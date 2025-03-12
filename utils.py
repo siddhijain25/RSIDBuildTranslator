@@ -184,7 +184,9 @@ def write_ouput_file(final_df, path):
         # check if path exists, else mkdir
         if dir and not os.path.isdir(dir):
             logger.error(f"Output file path '{dir}' does not exist.")
-            return
+            os.makedirs(dir)
+            logger.info(f"Creating '{dir}' ...")
+            #return
         if not ext:
             logger.error(
                 f"Output file '{path}' does not have an extension.\nSupported extensions are .txt, .tsv, and .csv"

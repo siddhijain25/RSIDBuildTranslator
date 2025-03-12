@@ -19,16 +19,13 @@ def run(args):
     input_data.columns = [re.sub(r"[^a-zA-Z0-9\_ ]", "", col) for col in input_data.columns]
     ids_to_search = input_data[args.rsid_col].tolist()
 
-    # Perform checks on ids_to_search
     if not make_checks(ids_to_search, args.rsid_col):
         return
 
-    # Load database safely
     with load_gtex_data() as gtex_con:
         if gtex_con:
             gtex_cur = gtex_con.cursor()
 
-            # Construct and execute query safely
             query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
 
             results_df = query_to_df(query, ids_to_search, gtex_cur)
