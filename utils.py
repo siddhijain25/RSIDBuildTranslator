@@ -93,7 +93,7 @@ def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
 
 def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
     df[[new_col_1, new_col_2]] = df[col_to_split].str.split("_", expand=True)
-    df = df.drop(columns=col_to_split, inplace=True)
+    df.drop(columns=col_to_split, inplace=True)
     return df
 
 
