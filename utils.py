@@ -61,34 +61,40 @@ def query_to_df(query, ids_to_search, cur):
 
 
 def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
-    if lookup_column == "rsid_dbSNP155":
-        results_df[["chr37", "pos37"]] = results_df["chrpos37"].str.split(
-            "_", expand=True
-        )
-        results_df[["chr38", "pos38"]] = results_df["chrpos38"].str.split(
-            "_", expand=True
-        )
-        results_df.drop(columns=["chrpos37", "chrpos38"], inplace=True)
-        results_df = results_df[
-            ["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38", "ref", "alt"]
-        ]
-    elif lookup_column == "chrpos37":
-        results_df[["chr38", "pos38"]] = results_df["chrpos38"].str.split(
-            "_", expand=True
-        )
-        results_df.drop(columns=["chrpos38"], inplace=True)
-        results_df = results_df[["rsid_dbSNP155", "chr38", "pos38", "ref", "alt"]]
-    elif lookup_column == "chrpos38":
-        results_df[["chr37", "pos37"]] = results_df["chrpos37"].str.split(
-            "_", expand=True
-        )
-        results_df.drop(columns=["chrpos37"], inplace=True)
-        results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
+    try:
+        if lookup_column == "rsid_dbSNP155":
+            results_df = split_and_drop_columns(
+                results_df, "chrpos37", "chr37", "pos37"
+            )
+            results_df = split_and_drop_columns(
+                results_df, "chrpos38", "chr38", "pos38"
+            )
+            results_df = results_df[
+                ["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38", "ref", "alt"]
+            ]
+        elif lookup_column == "chrpos37":
+            results_df = split_and_drop_columns(
+                results_df, "chrpos38", "chr38", "pos38"
+            )
+            results_df = results_df[["rsid_dbSNP155", "chr38", "pos38", "ref", "alt"]]
+        elif lookup_column == "chrpos38":
+            results_df = split_and_drop_columns(
+                results_df, "chrpos37", "chr37", "pos37"
+            )
+            results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
+        final_df = pd.merge(
+            input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
+        ).drop(columns=lookup_column)
+        return final_df
+    except Exception as e:
+        logger.error(f"An error occurred whle cleaning and merging query data: {e}")
+        return None
 
-    final_df = pd.merge(
-        input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
-    ).drop(columns=lookup_column)
-    return final_df
+
+def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
+    df[[new_col_1, new_col_2]] = df[col_to_split].str.split("_", expand=True)
+    df = df.drop(columns=col_to_split, inplace=True)
+    return df
 
 
 # # # ###########
