@@ -30,7 +30,9 @@ def run(args):
 
             results_df = query_to_df(query, ids_to_search, gtex_cur)
 
-            final_df = cleanup_query_df(results_df, input_data, args.rsid_col, "rsid_dbSNP155", args.exclude_ref_alt)
+            final_df = cleanup_query_df(
+                results_df, input_data, args.rsid_col, "rsid_dbSNP155", args.exclude_ref_alt
+            )
 
             print(final_df)
             write_ouput_file(final_df, args.output)
