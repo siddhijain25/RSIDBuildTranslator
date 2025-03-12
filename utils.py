@@ -110,7 +110,7 @@ def query_to_df(query, ids_to_search, cur):
         return None
 
 
-def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
+def cleanup_query_df(results_df, input_data, rsid_col, lookup_column, exclude_ref_alt=False):
     """
     Cleans up the query result df and merges it with input file.
 
@@ -127,15 +127,24 @@ def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
         if lookup_column == "rsid_dbSNP155":
             results_df = split_and_drop_columns(results_df, "chrpos37", "chr37", "pos37")
             results_df = split_and_drop_columns(results_df, "chrpos38", "chr38", "pos38")
-            results_df = results_df[
-                ["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38", "ref", "alt"]
-            ]
+            if exclude_ref_alt:
+                results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38"]]
+            else:
+                results_df = results_df[
+                    ["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38", "ref", "alt"]
+                ]
         elif lookup_column == "chrpos37":
             results_df = split_and_drop_columns(results_df, "chrpos38", "chr38", "pos38")
-            results_df = results_df[["rsid_dbSNP155", "chr38", "pos38", "ref", "alt"]]
+            if exclude_ref_alt:
+                results_df = results_df[["rsid_dbSNP155", "chr38", "pos38"]]
+            else:
+                results_df = results_df[["rsid_dbSNP155", "chr38", "pos38", "ref", "alt"]]
         elif lookup_column == "chrpos38":
             results_df = split_and_drop_columns(results_df, "chrpos37", "chr37", "pos37")
-            results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
+            if exclude_ref_alt:
+                results_df = results_df[["rsid_dbSNP155", "chr37", "pos37"]]
+            else:
+                results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
         final_df = pd.merge(
             input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
         ).drop(columns=lookup_column)

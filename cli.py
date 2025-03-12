@@ -24,9 +24,14 @@ def create_parser():
     parent_parser.add_argument(
         "-i", "--input", help="Name of input file with path", required=True, type=str
     )
-
     parent_parser.add_argument(
         "-o", "--output", help="Name of output file with path", required=True, type=str
+    )
+    parent_parser.add_argument(
+        "--exclude-ref-alt",
+        dest="exclude_ref_alt",
+        help="Flag to exclude printing reference and alternate alleles in output",
+        action="store_true",
     )
 
     subparsers = parser.add_subparsers(dest="mode", help="subcommand help")
