@@ -63,20 +63,24 @@ def get_query(table_name, ids_to_search, lookup_column):
     Returns:
     query (str): A query string formatted to have same number of "?" as "ids_to_search", which can be dynamically replaced.
     """
-    allowed_tables = {"GTEx_lookup"}
-    allowed_lookup_columns = {"rsid_dbSNP155", "chrpos37", "chrpos38"}
+    try:
+        allowed_tables = {"GTEx_lookup"}
+        allowed_lookup_columns = {"rsid_dbSNP155", "chrpos37", "chrpos38"}
 
-    if table_name not in allowed_tables:
-        raise ValueError(f"Invalid table name: {table_name}")
-    if lookup_column not in allowed_lookup_columns:
-        raise ValueError(f"Invalid column name: {lookup_column}")
+        if table_name not in allowed_tables:
+            raise ValueError(f"Invalid table name: {table_name}")
+        if lookup_column not in allowed_lookup_columns:
+            raise ValueError(f"Invalid column name: {lookup_column}")
 
-    # Create the SQL query dynamically
-    query = f"""
-    SELECT * FROM {table_name}
-    WHERE {lookup_column} IN ({", ".join(["?"] * len(ids_to_search))})
-    """
-    return query
+        # Create the SQL query dynamically
+        query = f"""
+        SELECT * FROM {table_name}
+        WHERE {lookup_column} IN ({", ".join(["?"] * len(ids_to_search))})
+        """
+        return query
+    except Exception as e:
+        logger.error(f"Error encountered while running get_query() : {e}")
+        return None
 
 
 def query_to_df(query, ids_to_search, cur):
@@ -91,15 +95,19 @@ def query_to_df(query, ids_to_search, cur):
     Returns:
     results_df (pd.DataFrame): Query results in the form of a Pandas dataframe.
     """
-    cur.execute(query, ids_to_search)
-    columns = [desc[0] for desc in cur.description]
-    results = []
-    for value in cur.fetchall():
-        tmp = {columns[index]: column for index, column in enumerate(value)}
-        results.append(tmp)
+    try:
+        cur.execute(query, ids_to_search)
+        columns = [desc[0] for desc in cur.description]
+        results = []
+        for value in cur.fetchall():
+            tmp = {columns[index]: column for index, column in enumerate(value)}
+            results.append(tmp)
 
-    results_df = pd.DataFrame(results)
-    return results_df
+        results_df = pd.DataFrame(results)
+        return results_df
+    except Exception as e:
+        logger.error(f"Error encountered while running query_to_df() : {e}")
+        return None
 
 
 def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
@@ -133,7 +141,7 @@ def cleanup_query_df(results_df, input_data, rsid_col, lookup_column):
         ).drop(columns=lookup_column)
         return final_df
     except Exception as e:
-        logger.error(f"An error occurred whle cleaning and merging query data: {e}")
+        logger.error(f"Error encountered while running cleanup_query_df() : {e}")
         return None
 
 
@@ -150,9 +158,13 @@ def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
     Returns:
     df (pd.DataFrame): Returns dataframe with 2 new columns and dropped col_to_split.
     """
-    df[[new_col_1, new_col_2]] = df[col_to_split].str.split("_", expand=True)
-    df.drop(columns=col_to_split, inplace=True)
-    return df
+    try:
+        df[[new_col_1, new_col_2]] = df[col_to_split].str.split("_", expand=True)
+        df.drop(columns=col_to_split, inplace=True)
+        return df
+    except Exception as e:
+        logger.error(f"Error encountered while running split_and_drop_columns() : {e}")
+        return None
 
 
 def write_ouput_file(final_df, path):
@@ -169,20 +181,20 @@ def write_ouput_file(final_df, path):
     try:
         dir, file = os.path.split(path)
         _filename, ext = os.path.splitext(file)
-        #check if path exists, else mkdir
+        # check if path exists, else mkdir
         if dir and not os.path.isdir(dir):
-            logger.error(f"Output file path {dir} does not exist.")
+            logger.error(f"Output file path '{dir}' does not exist.")
             return
         if not ext:
             logger.error(
-                f"Output file {path} does not have an extension.\nSupported extensions are .txt, .tsv, and .csv"
+                f"Output file '{path}' does not have an extension.\nSupported extensions are .txt, .tsv, and .csv"
             )
         elif ext in [".txt", ".tsv"]:
             final_df.to_csv(path, sep="\t", index=False)
-            logger.info(f"Output file successfully written to {path} with tab as delimiter.")
+            logger.info(f"Output file successfully written to '{path}' with tab as delimiter.")
         elif ext == ".csv":
             final_df.to_csv(path, index=False)
-            logger.info(f"Output file successfully written to {path} with commas as delimiter.")
+            logger.info(f"Output file successfully written to '{path}' with commas as delimiter.")
         else:
             logger.error(
                 f"Unsupported file extension: {ext}\nSupported extensions are .txt, .tsv, and .csv"
