@@ -197,7 +197,7 @@ def write_ouput_file(final_df, path):
             logger.info(f"Output file successfully written to '{path}' with commas as delimiter.")
         else:
             logger.error(
-                f"Unsupported file extension: {ext}\nSupported extensions are .txt, .tsv, and .csv"
+                f"Unsupported file extension: '{ext}'\nSupported extensions are .txt, .tsv, and .csv"
             )
     except Exception as e:
         logger.error(f"An error occurred while writing the output file: {e}")
