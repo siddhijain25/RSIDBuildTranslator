@@ -167,20 +167,23 @@ def write_ouput_file(final_df, path):
     None
     """
     try:
-        _,ext=os.path.splitext(path)
+        _, ext = os.path.splitext(path)
         if not ext:
-            logger.error(f"Output file {path} does not have an extension.\nSupported extensions are .txt, .tsv, and .csv")
-        elif ext in [".txt",".tsv"]:
-            final_df.to_csv(path,sep="\t",index=False)
+            logger.error(
+                f"Output file {path} does not have an extension.\nSupported extensions are .txt, .tsv, and .csv"
+            )
+        elif ext in [".txt", ".tsv"]:
+            final_df.to_csv(path, sep="\t", index=False)
             logger.info(f"Output file successfully written to {path} with tab as delimiter.")
-        elif ext==".csv":
-            final_df.to_csv(path,index=False)
+        elif ext == ".csv":
+            final_df.to_csv(path, index=False)
             logger.info(f"Output file successfully written to {path} with commas as delimiter.")
         else:
-            logger.error(f"Unsupported file extension: {ext}\nSupported extensions are .txt, .tsv, and .csv")
+            logger.error(
+                f"Unsupported file extension: {ext}\nSupported extensions are .txt, .tsv, and .csv"
+            )
     except Exception as e:
         logger.error(f"An error occurred while writing the output file: {e}")
-
 
 
 # # # ###########

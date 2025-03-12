@@ -7,7 +7,7 @@ from utils import (
     load_gtex_data,
     query_to_df,
     read_input_file,
-    write_ouput_file
+    write_ouput_file,
 )
 
 
