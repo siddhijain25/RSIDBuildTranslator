@@ -1,5 +1,7 @@
-import pandas as pd
 import sqlite3
+
+import pandas as pd
+
 from cli import logger
 
 
@@ -8,8 +10,8 @@ def read_input_file(path):
         df = pd.read_table(path, sep=None, engine="python")
         if df.empty:
             logger.warning(f"Input file '{path}' is empty.")
-        elif len(df.columns) < 2:
-            logger.warning(f"Input file '{path}' contains less than 2 columns.")
+        # elif len(df.columns) < 2:
+        #     logger.warning(f"Input file '{path}' contains less than 2 columns.")
         else:
             logger.info(f"Input file '{path}' read successfully.")
         return df
@@ -30,7 +32,6 @@ def load_gtex_data():
 
 
 def get_query(table_name, ids_to_search, lookup_column):
-
     allowed_tables = {"GTEx_lookup"}
     allowed_lookup_columns = {"rsid_dbSNP155", "chrpos37", "chrpos38"}
 
@@ -42,7 +43,7 @@ def get_query(table_name, ids_to_search, lookup_column):
     # Create the SQL query dynamically
     query = f"""
     SELECT * FROM {table_name}
-    WHERE {lookup_column} IN ({', '.join(['?'] * len(ids_to_search))})
+    WHERE {lookup_column} IN ({", ".join(["?"] * len(ids_to_search))})
     """
     return query
 

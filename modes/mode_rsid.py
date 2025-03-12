@@ -1,13 +1,13 @@
-import pandas as pd
+import re
+
 from cli import logger
 from utils import (
-    read_input_file,
-    load_gtex_data,
-    get_query,
-    query_to_df,
     cleanup_query_df,
+    get_query,
+    load_gtex_data,
+    query_to_df,
+    read_input_file,
 )
-import re
 
 
 def run(args):

@@ -1,5 +1,5 @@
 from cli import create_parser, logger
-from modes import mode_rsid, mode_chrpos37, mode_chrpos38
+from modes import mode_chrpos37, mode_chrpos38, mode_rsid
 
 
 def main():
