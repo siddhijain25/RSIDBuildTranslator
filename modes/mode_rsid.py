@@ -3,7 +3,7 @@ import re
 from cli import logger
 from utils import (
     cleanup_query_df,
-    create_id_to_search,
+    create_ids_to_search,
     get_query,
     load_gtex_data,
     query_to_df,
@@ -20,7 +20,7 @@ def run(args):
     if not make_checks(input_data, args.rsid_col):
         return
 
-    ids_to_search = create_id_to_search(input_data, args.rsid_col)
+    ids_to_search = create_ids_to_search(input_data, args.rsid_col)
 
     with load_gtex_data() as gtex_con:
         if gtex_con:

@@ -53,7 +53,7 @@ def load_gtex_data():
         return None  # , None
 
 
-def create_id_to_search(input_data, colnames):
+def create_ids_to_search(input_data, colnames):
     if len(colnames) == 1:
         ids_to_search = input_data[colnames].tolist()
         return ids_to_search
