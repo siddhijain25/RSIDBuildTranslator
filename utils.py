@@ -54,6 +54,16 @@ def load_gtex_data():
 
 
 def create_ids_to_search(input_data, colnames):
+    """
+    Creates a list of ids that will be later used to query the SQL database.
+
+    Parameters:
+    input_data (pd.DataFrame): Input file provided by user as Pandas dataframe.
+    colnames (list): List of column names provided by the user.
+
+    Returns:
+    ids_to_search (list): The values from colnames converted to a list.
+    """
     try:
         if len(colnames) == 1:
             ids_to_search = input_data[colnames[0]].tolist()
@@ -74,7 +84,7 @@ def get_query(table_name, ids_to_search, lookup_column):
 
     Parameters:
     table_name (str): Name of GTEx database table.
-    ids_to_search (list): The values from rsID column converted to a list.
+    ids_to_search (list): The values from user input colnames converted to a list.
     lookup_column (str): Name of column from GTEx table to use for query.
 
     Returns:
