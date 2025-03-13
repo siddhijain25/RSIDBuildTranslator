@@ -1,4 +1,5 @@
 import os
+import re
 import sqlite3
 
 import pandas as pd
@@ -19,6 +20,7 @@ def read_input_file(path):
     """
     try:
         df = pd.read_table(path, sep=None, engine="python")
+        df.columns = [re.sub(r"[^a-zA-Z0-9\_ ]", "", col) for col in df.columns]
         if df.empty:
             logger.warning(f"Input file '{path}' is empty.")
         # elif len(df.columns) < 2:
@@ -51,6 +53,17 @@ def load_gtex_data():
         return None  # , None
 
 
+def create_id_to_search(input_data, colnames):
+    if len(colnames) == 1:
+        ids_to_search = input_data[colnames].tolist()
+        return ids_to_search
+    else:
+        ids_to_search = (
+            input_data[colnames[0]].astype(str) + "_" + input_data[colnames[1]].astype(str)
+        ).tolist()
+        return ids_to_search
+
+
 def get_query(table_name, ids_to_search, lookup_column):
     """
     Dynamically generates SQL query based on user input. Also reduces SQL injection risk.
@@ -72,7 +85,6 @@ def get_query(table_name, ids_to_search, lookup_column):
         if lookup_column not in allowed_lookup_columns:
             raise ValueError(f"Invalid column name: {lookup_column}")
 
-        # Create the SQL query dynamically
         query = f"""
         SELECT * FROM {table_name}
         WHERE {lookup_column} IN ({", ".join(["?"] * len(ids_to_search))})
@@ -119,6 +131,7 @@ def cleanup_query_df(results_df, input_data, rsid_col, lookup_column, exclude_re
     input_data (pd.DataFrame): Input file provided by user as Pandas dataframe.
     rsid_col (str): Name of the rsID column as provided by user.
     lookup_column (str): Name of column from GTEx table used for query.
+    exclude_ref_alt (bool): "True" excludes ref and alt alleles from gtex database
 
     Returns:
     final_df (pd.DataFrame): Merged final data in the form of a Pandas dataframe.

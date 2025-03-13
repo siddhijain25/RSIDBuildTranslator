@@ -3,6 +3,7 @@ import re
 from cli import logger
 from utils import (
     cleanup_query_df,
+    create_id_to_search,
     get_query,
     load_gtex_data,
     query_to_df,
@@ -16,11 +17,10 @@ def run(args):
 
     input_data = read_input_file(args.input)
 
-    input_data.columns = [re.sub(r"[^a-zA-Z0-9\_ ]", "", col) for col in input_data.columns]
-    ids_to_search = input_data[args.rsid_col].tolist()
-
-    if not make_checks(ids_to_search, args.rsid_col):
+    if not make_checks(input_data, args.rsid_col):
         return
+
+    ids_to_search = create_id_to_search(input_data, args.rsid_col)
 
     with load_gtex_data() as gtex_con:
         if gtex_con:
@@ -38,7 +38,28 @@ def run(args):
             write_ouput_file(final_df, args.output)
 
 
-def make_checks(ids_to_search, rsid_col):
+# def make_checks(ids_to_search, rsid_col):
+#     """
+#     Checks if the rsID column specified has rsIDs in the correct format.
+
+#     Parameters:
+#     ids_to_search (list): The values from rsID column converted to a list.
+#     rsid_col (str): Name of the rsID column as provided by user.
+
+#     Returns:
+#     Logical value True or False
+#     """
+#     if not ids_to_search:
+#         logger.warning(f"rsID column '{rsid_col}' is empty.")
+#         return False
+#     if not all(re.match(r"^rs[0-9]+$", i) for i in ids_to_search):
+#         logger.warning(f"IDs in rsID column '{rsid_col}' do not match rsID format")
+#         return False
+#     logger.info(f"rsID column '{rsid_col}' passed checks ✨")
+#     return True
+
+
+def make_checks(input_data, rsid_col):
     """
     Checks if the rsID column specified has rsIDs in the correct format.
 
@@ -47,12 +68,15 @@ def make_checks(ids_to_search, rsid_col):
     rsid_col (str): Name of the rsID column as provided by user.
 
     Returns:
-    Logical value True or False
+    bool :True if checks pass, or False
     """
-    if not ids_to_search:
+    if rsid_col not in input_data.columns:
+        logger.warning(f"rsID column '{rsid_col}' does not exist in the input dataframe.")
+        return False
+    if input_data[rsid_col].empty:
         logger.warning(f"rsID column '{rsid_col}' is empty.")
         return False
-    if not all(re.match(r"^rs[0-9]+$", i) for i in ids_to_search):
+    if not all(re.match(r"^rs[0-9]+$", i) for i in input_data[rsid_col]):
         logger.warning(f"IDs in rsID column '{rsid_col}' do not match rsID format")
         return False
     logger.info(f"rsID column '{rsid_col}' passed checks ✨")
