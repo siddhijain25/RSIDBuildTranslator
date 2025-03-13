@@ -54,14 +54,18 @@ def load_gtex_data():
 
 
 def create_ids_to_search(input_data, colnames):
-    if len(colnames) == 1:
-        ids_to_search = input_data[colnames[0]].tolist()
-        return ids_to_search
-    else:
-        ids_to_search = (
-            input_data[colnames[0]].astype(str) + "_" + input_data[colnames[1]].astype(str)
-        ).tolist()
-        return ids_to_search
+    try:
+        if len(colnames) == 1:
+            ids_to_search = input_data[colnames[0]].tolist()
+            return ids_to_search
+        else:
+            ids_to_search = (
+                input_data[colnames[0]].astype(str) + "_" + input_data[colnames[1]].astype(str)
+            ).tolist()
+            return ids_to_search
+    except Exception as e:
+        logger.error(f"Error encountered while running create_ids_to_search() : {e}")
+        return None
 
 
 def get_query(table_name, ids_to_search, lookup_column):
