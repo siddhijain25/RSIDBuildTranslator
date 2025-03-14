@@ -31,6 +31,7 @@ def run(args):
             results_df = query_to_df(query, ids_to_search, gtex_cur)
 
             print(results_df)
+            print(input_data)
             final_df = cleanup_query_df(
                 results_df, input_data, "new_ids", "chrpos37", args.exclude_ref_alt
             )
