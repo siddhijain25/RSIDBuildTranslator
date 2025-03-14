@@ -20,7 +20,7 @@ def run(args):
     if not make_checks(input_data, args.chr37, args.pos37):
         return
 
-    ids_to_search, input_data = create_ids_to_search(input_data, [args.chr37, args.pos37])
+    input_data, ids_to_search = create_ids_to_search(input_data, [args.chr37, args.pos37])
 
     with load_gtex_data() as gtex_con:
         if gtex_con:
