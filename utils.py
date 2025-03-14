@@ -185,6 +185,7 @@ def cleanup_query_df(
         final_df = pd.merge(
             input_data, results_df, how="left", left_on=input_data_column, right_on=lookup_column
         ).drop(columns=lookup_column)
+        logger.info("Data cleaned and merged successfully.")
         return final_df
     except Exception as e:
         logger.error(f"Error encountered while running cleanup_query_df() : {e}")
@@ -205,9 +206,12 @@ def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
     df (pd.DataFrame): Returns dataframe with 2 new columns and dropped col_to_split.
     """
     try:
-        df[[new_col_1, new_col_2]] = df[col_to_split].str.split("_", expand=True)
-        df.drop(columns=col_to_split, inplace=True)
-        return df
+        if col_to_split in df.columns:
+            df[[new_col_1, new_col_2]] = df[col_to_split].str.split("_", expand=True)
+            df.drop(columns=col_to_split, inplace=True)
+            return df
+        else:
+            logger.warning(f"Column {col_to_split} not found in results_df.")
     except Exception as e:
         logger.error(f"Error encountered while running split_and_drop_columns() : {e}")
         return None
