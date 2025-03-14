@@ -61,7 +61,7 @@ def make_checks(input_data, chr_col, pos_col):
     ):
         logger.error(f"Chromosome numbers in '{chr_col}' do not match chr format")
         return False
-    if not all(re.match(r"^\d+$", i) for i in input_data[pos_col]):
+    if not all(re.match(r"^\d+$", str(i)) for i in input_data[pos_col]):
         logger.error(f"Chromosome numbers in '{pos_col}' do not match chr format")
         return False
     logger.info(f"Columns '{chr_col}' and '{pos_col}' passed checks ✨")
