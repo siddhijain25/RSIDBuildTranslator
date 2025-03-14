@@ -24,8 +24,6 @@ def read_input_file(path):
         if df.empty:
             logger.error(f"Input file '{path}' is empty.")
             return None
-        # elif len(df.columns) < 2:
-        #     logger.warning(f"Input file '{path}' contains less than 2 columns.")
         else:
             logger.info(f"Input file '{path}' read successfully.")
             return df
@@ -46,12 +44,11 @@ def load_gtex_data():
     """
     try:
         gtex_con = sqlite3.connect("data/GTEx_v10.db")
-        # gtex_cur = gtex_con.cursor()
         logger.info("GTEx database read successfully.")
-        return gtex_con  # , gtex_cur
+        return gtex_con
     except Exception as e:
         logger.error(f"An error has occured while reading the GTEx database: {e}")
-        return None  # , None
+        return None
 
 
 def create_ids_to_search(input_data, colnames):
@@ -70,8 +67,6 @@ def create_ids_to_search(input_data, colnames):
             ids_to_search = input_data[colnames[0]].tolist()
             return ids_to_search
         else:
-            # accounnt for "chr1"
-            # ids_to_search = (input_data[colnames[0]].astype(str) + "_" + input_data[colnames[1]].astype(str)).tolist()
             input_data["new_ids"] = (
                 input_data[colnames[0]].str.extract(
                     r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", expand=False
@@ -179,6 +174,7 @@ def cleanup_query_df(
             ).drop(columns=lookup_column)
             logger.info("Data cleaned and merged successfully.")
             return final_df
+
         elif lookup_column == "chrpos37":
             results_df = split_and_drop_columns(results_df, "chrpos38", "chr38", "pos38")
             if exclude_ref_alt:
