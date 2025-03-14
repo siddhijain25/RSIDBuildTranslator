@@ -170,18 +170,18 @@ def cleanup_query_df(
                 results_df = results_df[
                     ["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38", "ref", "alt"]
                 ]
-        elif lookup_column == "chpos37":
+        elif lookup_column == "chrpos37":
             results_df = split_and_drop_columns(results_df, "chrpos38", "chr38", "pos38")
             if exclude_ref_alt:
-                results_df = results_df[["rsid_dbSNP155", "chr38", "pos38"]]
+                results_df = results_df[["chrpos37","rsid_dbSNP155", "chr38", "pos38"]]
             else:
-                results_df = results_df[["rsid_dbSNP155", "chr38", "pos38", "ref", "alt"]]
+                results_df = results_df[["chrpos37","rsid_dbSNP155", "chr38", "pos38", "ref", "alt"]]
         elif lookup_column == "chrpos38":
             results_df = split_and_drop_columns(results_df, "chrpos37", "chr37", "pos37")
             if exclude_ref_alt:
-                results_df = results_df[["rsid_dbSNP155", "chr37", "pos37"]]
+                results_df = results_df[["chrpos38","rsid_dbSNP155", "chr37", "pos37"]]
             else:
-                results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
+                results_df = results_df[["chrpos38","rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
         final_df = pd.merge(
             input_data, results_df, how="left", left_on=input_data_column, right_on=lookup_column
         ).drop(columns=lookup_column)
