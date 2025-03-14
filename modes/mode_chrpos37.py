@@ -28,6 +28,8 @@ def run(args):
 
             query = get_query("GTEx_lookup", ids_to_search, "chrpos37")
 
+            print(query)
+            print(ids_to_search)
             results_df = query_to_df(query, ids_to_search, gtex_cur)
 
             final_df = cleanup_query_df(
