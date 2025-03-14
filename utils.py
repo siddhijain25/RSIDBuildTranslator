@@ -22,12 +22,13 @@ def read_input_file(path):
         df = pd.read_table(path, sep=None, engine="python")
         df.columns = [re.sub(r"[^a-zA-Z0-9\_ ]", "", col) for col in df.columns]
         if df.empty:
-            logger.warning(f"Input file '{path}' is empty.")
+            logger.error(f"Input file '{path}' is empty.")
+            return None
         # elif len(df.columns) < 2:
         #     logger.warning(f"Input file '{path}' contains less than 2 columns.")
         else:
             logger.info(f"Input file '{path}' read successfully.")
-        return df
+            return df
     except Exception as e:
         logger.error(f"An error has occured while reading the input file: {e}")
         return None
@@ -69,10 +70,17 @@ def create_ids_to_search(input_data, colnames):
             ids_to_search = input_data[colnames[0]].tolist()
             return ids_to_search
         else:
-            ids_to_search = (
-                input_data[colnames[0]].astype(str) + "_" + input_data[colnames[1]].astype(str)
-            ).tolist()
-            return ids_to_search
+            # accounnt for "chr1"
+            # ids_to_search = (input_data[colnames[0]].astype(str) + "_" + input_data[colnames[1]].astype(str)).tolist()
+            input_data["new_ids"] = (
+                input_data[colnames[0]].str.extract(
+                    r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", expand=False
+                )
+                + "_"
+                + input_data[colnames[1]].astype(str)
+            )
+            ids_to_search = input_data["new_ids"].tolist()
+            return input_data, ids_to_search
     except Exception as e:
         logger.error(f"Error encountered while running create_ids_to_search() : {e}")
         return None
@@ -136,14 +144,16 @@ def query_to_df(query, ids_to_search, cur):
         return None
 
 
-def cleanup_query_df(results_df, input_data, rsid_col, lookup_column, exclude_ref_alt=False):
+def cleanup_query_df(
+    results_df, input_data, input_data_column, lookup_column, exclude_ref_alt=False
+):
     """
     Cleans up the query result df and merges it with input file.
 
     Parameters:
     results_df (pd.Dataframe): Query result dataframe as returned by query_to_df()
     input_data (pd.DataFrame): Input file provided by user as Pandas dataframe.
-    rsid_col (str): Name of the rsID column as provided by user.
+    input_data_column (str): Name of the column in the input data to use for merging dataframes.
     lookup_column (str): Name of column from GTEx table used for query.
     exclude_ref_alt (bool): "True" excludes ref and alt alleles from gtex database
 
@@ -173,7 +183,7 @@ def cleanup_query_df(results_df, input_data, rsid_col, lookup_column, exclude_re
             else:
                 results_df = results_df[["rsid_dbSNP155", "chr37", "pos37", "ref", "alt"]]
         final_df = pd.merge(
-            input_data, results_df, how="left", left_on=rsid_col, right_on=lookup_column
+            input_data, results_df, how="left", left_on=input_data_column, right_on=lookup_column
         ).drop(columns=lookup_column)
         return final_df
     except Exception as e:
@@ -218,7 +228,7 @@ def write_ouput_file(final_df, path):
         dir, file = os.path.split(path)
         _filename, ext = os.path.splitext(file)
         if dir and not os.path.isdir(dir):
-            logger.error(f"Output file path '{dir}' does not exist.")
+            logger.warning(f"Output file path '{dir}' does not exist.")
             os.makedirs(dir)
             logger.info(f"Creating '{dir}' ...")
         if not ext:

@@ -71,13 +71,13 @@ def make_checks(input_data, rsid_col):
     bool :True if checks pass, or False
     """
     if rsid_col not in input_data.columns:
-        logger.warning(f"rsID column '{rsid_col}' does not exist in the input dataframe.")
+        logger.error(f"rsID column '{rsid_col}' does not exist in the input dataframe.")
         return False
     if input_data[rsid_col].empty:
-        logger.warning(f"rsID column '{rsid_col}' is empty.")
+        logger.error(f"rsID column '{rsid_col}' is empty.")
         return False
     if not all(re.match(r"^rs[0-9]+$", i) for i in input_data[rsid_col]):
-        logger.warning(f"IDs in rsID column '{rsid_col}' do not match rsID format")
+        logger.error(f"IDs in rsID column '{rsid_col}' do not match rsID format")
         return False
     logger.info(f"rsID column '{rsid_col}' passed checks ✨")
     return True
