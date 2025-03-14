@@ -56,14 +56,12 @@ def create_parser():
     )
     parser_chrpos37.add_argument(
         "-chr37",
-        "--chr_col_b37",
         help="Name of column with chromosome in build GRCh37",
         required=True,
         type=str,
     )
     parser_chrpos37.add_argument(
         "-pos37",
-        "--pos_col_b37",
         help="Name of column with position in build GRCh37",
         required=True,
         type=str,
@@ -76,14 +74,12 @@ def create_parser():
     )
     parser_chrpos38.add_argument(
         "-chr38",
-        "--chr_col_b38",
         help="Name of column with chromosome in build GRCh38",
         required=True,
         type=str,
     )
     parser_chrpos38.add_argument(
         "-pos38",
-        "--pos_col_b38",
         help="Name of column with position in build GRCh38",
         required=True,
         type=str,
