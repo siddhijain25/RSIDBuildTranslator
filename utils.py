@@ -170,7 +170,7 @@ def cleanup_query_df(
                 results_df = results_df[
                     ["rsid_dbSNP155", "chr37", "pos37", "chr38", "pos38", "ref", "alt"]
                 ]
-        elif lookup_column == "chrpos37":
+        elif lookup_column == "chpos37":
             results_df = split_and_drop_columns(results_df, "chrpos38", "chr38", "pos38")
             if exclude_ref_alt:
                 results_df = results_df[["rsid_dbSNP155", "chr38", "pos38"]]
