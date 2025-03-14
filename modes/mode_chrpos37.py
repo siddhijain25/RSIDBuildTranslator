@@ -21,25 +21,20 @@ def run(args):
         return
 
     input_data, ids_to_search = create_ids_to_search(input_data, [args.chr37, args.pos37])
-    print("input_data", input_data)
-    print("ids_to_search", ids_to_search)
 
     with load_gtex_data() as gtex_con:
         if gtex_con:
             gtex_cur = gtex_con.cursor()
 
             query = get_query("GTEx_lookup", ids_to_search, "chrpos37")
-            print("query", query)
 
             results_df = query_to_df(query, ids_to_search, gtex_cur)
-
-            print("results_df", results_df)
 
             final_df = cleanup_query_df(
                 results_df, input_data, "new_ids", "chrpos37", args.exclude_ref_alt
             )
 
-            # print(final_df)
+            print(final_df)
             write_ouput_file(final_df, args.output)
 
 
