@@ -3,11 +3,11 @@ name: Publish tool to TestPyPI and PyPI
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - '*.*.*'
 
 jobs:
   build:
-    name: Build distribution
+    name: Build distribution 📦
     runs-on: ubuntu-latest
 
     steps:
