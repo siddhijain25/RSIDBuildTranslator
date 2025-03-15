@@ -7,12 +7,13 @@ import pandas as pd
 
 from RSIDBuildTranslator.cli import logger
 
-# https://drive.google.com/file/d/1Bug-VI1HGJbyymeveeb75hrym18krrh9/view?usp=drive_link
-# 1Bug-VI1HGJbyymeveeb75hrym18krrh9
-
-
 def get_local_db_path():
-    """Returns the correct database path inside the package's data folder."""
+    """
+    Returns the correct database path inside the package's data folder.
+
+    Returns:
+    Constructs and returns path to the GTEx database.
+    """
     package_path = os.path.dirname(os.path.abspath(__file__))  # Get the package location
     data_folder = os.path.join(package_path, "data")  # Path to data/ folder
     os.makedirs(data_folder, exist_ok=True)  # Ensure data folder exists
@@ -20,8 +21,12 @@ def get_local_db_path():
 
 
 def download_gtex_db():
-    """Downloads the GTEx database from Google Drive if it does not exist locally."""
-    # Google Drive File ID (Replace with your actual file ID)
+    """
+    Downloads the GTEx database from Google Drive if it does not exist locally.
+
+    Returns:
+    local_db_path: Path to the downloaded GTEx database.
+    """
     gdrive_file_id = "1Bug-VI1HGJbyymeveeb75hrym18krrh9"
     gdrive_url = f"https://drive.google.com/uc?id={gdrive_file_id}"
     local_db_path = get_local_db_path()
@@ -43,16 +48,12 @@ def load_gtex_data():
     """
     Reads GTEx database file.
 
-    Parameters:
-    None
-
     Returns:
     gtex_con : GTEx database file connection.
     """
     db_path = download_gtex_db()
     if db_path and os.path.exists(db_path):
         try:
-            # db_path = pkg_resources.files(RSIDBuildTranslator).joinpath("data/GTEx_v10.db")
             gtex_con = sqlite3.connect(db_path)
             logger.info("GTEx database read successfully.")
             return gtex_con
