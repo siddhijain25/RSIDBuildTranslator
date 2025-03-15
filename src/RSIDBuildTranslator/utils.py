@@ -7,6 +7,7 @@ import pandas as pd
 
 from RSIDBuildTranslator.cli import logger
 
+
 def get_local_db_path():
     """
     Returns the correct database path inside the package's data folder.
