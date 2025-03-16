@@ -70,4 +70,3 @@ def make_checks(input_data, chr_col, pos_col):
     except Exception as e:
         logger.error(f"An error has occured while running make_checks: {e}")
         return False
-

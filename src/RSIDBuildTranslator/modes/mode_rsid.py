@@ -1,4 +1,3 @@
-import re
 
 from RSIDBuildTranslator.cli import logger
 from RSIDBuildTranslator.utils import (
@@ -59,24 +58,36 @@ def make_checks(input_data, rsid_col):
 
         valid_rsids = input_data[rsid_col].dropna().astype(str)
 
-        invalid_rsids = valid_rsids[~valid_rsids.str.match(r"rs[0-9]+", na=False)]
+        invalid_rsids = valid_rsids[~valid_rsids.str.match(r"^rs[0-9]+$", na=False)]
         num_invalid = len(invalid_rsids)
         total_count = len(input_data[rsid_col])
 
-        if num_invalid == total_count:
+        print(f"num_invalid: {num_invalid}, total_count: {total_count}")  # Debugging line
+
+        if num_invalid < total_count:
+            logger.warning(
+                f"Some IDs in rsID column '{rsid_col}' do not match rsID format. "
+                f"{num_invalid}/{total_count} invalid values. First few: {invalid_rsids.head().tolist()}"
+            )
+        else:
             logger.error(
                 f"IDs in rsID column '{rsid_col}' do not match rsID format. "
                 f"First few invalid values: {invalid_rsids.head().tolist()}"
             )
             return False
-        elif num_invalid > 0:
-            logger.warning(
-                f"Some IDs in rsID column '{rsid_col}' do not match rsID format. "
-                f"{num_invalid}/{total_count} invalid values. First few: {invalid_rsids.head().tolist()}"
-            )
+        logger.info(
+            f"rsID column '{rsid_col}' passed checks with {total_count - num_invalid} valid IDs ✨"
+        )
+        return num_invalid < total_count
 
-        logger.info(f"rsID column '{rsid_col}' passed checks with {total_count - num_invalid} valid IDs ✨")
-        return True
     except Exception as e:
         logger.error(f"An error has occured while running make_checks: {e}")
         return False
+
+
+# if num_invalid == total_count:
+#     print(num_invalid)
+#     print(invalid_rsids)
+#     print(total_count)
+# elif num_invalid > 0:
+#     print("lol")
