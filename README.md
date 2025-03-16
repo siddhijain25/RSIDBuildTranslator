@@ -1,12 +1,13 @@
 # RSIDBuildTranslator
 
-RSIDBuildTranslator is a tool that annotates genetic data with rsIDs, chromosome, and position from GRCh37 or GRCh38, using whichever is available in your data. The database used in this tool is based on GTEx v10 whole genome sequencing variants from 953 individuals, and has a coverage of roughly 48.5M variants. 
+RSIDBuildTranslator is a tool that annotates genetic data with rsIDs, or chromosome and position from GRCh37 or GRCh38, using whichever is available in your data. The database used in this tool is based on GTEx v10 whole genome sequencing variants from 953 individuals, and has a coverage of roughly 48.5M variants. 
 
-This tool can be used on tabular data; for example GWAS summary statistics. 
+This tool can be used on tabular data; for example GWAS summary statistics. It requires only 1 column with rsIDs, or 2 columns with genomic positions in either build GRCh37 or GRCh38 to work.
 
 ## Table of Contents
 1. [Installation](#installation)
 2. [Usage](#usage)
+3. [Examples](#examples)
 
 
 
@@ -39,7 +40,7 @@ RSIDBuildTranslator chrpos38 -h
 | -h, --help | Use this flag to retrieve all options and help |
 | -i, --input | The name of the input file, with the path to the file (if required).
 | -o, --output | A name for the output file, with the path where you want to place it (if required).
-| --exclude-ref-alt (default=False)| Use this flag if you would like to exclude printing the ref and alt alleles from the databse to your output file.
+| --exclude-ref-alt | Include this flag in the command if you would like to exclude printing the ref and alt alleles from the databse to your output file. The ref and alt alleles are printed by default.
 
 ### Mode specific options:
 
@@ -62,3 +63,5 @@ RSIDBuildTranslator chrpos38 -h
 |-|-|
 | -chr38 | Name of the column with chromosome number in build GRCh38 (hg38) in your dataframe.
 | -pos38 | Name of the column with position in build GRCh38 (hg38) in your dataframe.
+
+## Examples
