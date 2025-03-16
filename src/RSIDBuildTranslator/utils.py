@@ -121,7 +121,7 @@ def create_ids_to_search(input_data, colnames):
         return None
 
 
-def get_query(table_name, ids_to_search, lookup_column):
+def get_query(table_name, lookup_column, batch_size):
     """
     Dynamically generates SQL query based on user input. Also reduces SQL injection risk.
 
@@ -144,7 +144,7 @@ def get_query(table_name, ids_to_search, lookup_column):
 
         query = f"""
         SELECT * FROM {table_name}
-        WHERE {lookup_column} IN ({", ".join(["?"] * len(ids_to_search))})
+        WHERE {lookup_column} IN ({", ".join(["?"] * batch_size)})
         """
         return query
     except Exception as e:
@@ -152,30 +152,32 @@ def get_query(table_name, ids_to_search, lookup_column):
         return None
 
 
-def query_to_df(query, ids_to_search, cur):
+def query_to_df(table_name, ids_to_search, lookup_column, cur, batch_size):
     """
-    Executes query and transforms it into a dataframe with correct column names.
+    Executes query in batches of 10,000 and returns a dataframe.
 
     Parameters:
-    query (str): query returned from get_query().
-    ids_to_search (list): The values from rsID column converted to a list.
-    cur : GTEx database cursor.
+    - table_name (str): Name of the database table.
+    - ids_to_search (list): List of values for the IN clause.
+    - lookup_column (str): Column name to filter results.
+    - cur: SQLite database cursor.
 
     Returns:
-    results_df (pd.DataFrame): Query results in the form of a Pandas dataframe.
+    - pd.DataFrame: Query results.
     """
     try:
-        cur.execute(query, ids_to_search)
-        columns = [desc[0] for desc in cur.description]
         results = []
-        for value in cur.fetchall():
-            tmp = {columns[index]: column for index, column in enumerate(value)}
-            results.append(tmp)
+        for i in range(0, len(ids_to_search), batch_size):
+            batch = ids_to_search[i : i + batch_size]
+            query = get_query(table_name, lookup_column, len(batch))
+            cur.execute(query, batch)
+            columns = [desc[0] for desc in cur.description]
+            results.extend([dict(zip(columns, row, strict=False)) for row in cur.fetchall()])
+            logger.info(f"Processed entries {i} to {i + len(batch) - 1}...")
 
-        results_df = pd.DataFrame(results)
-        return results_df
+        return pd.DataFrame(results)
     except Exception as e:
-        logger.error(f"Error encountered while running query_to_df() : {e}")
+        logger.error(f"Error in query_to_df(): {e}")
         return None
 
 

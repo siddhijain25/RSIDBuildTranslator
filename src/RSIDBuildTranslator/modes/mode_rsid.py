@@ -2,7 +2,6 @@ from RSIDBuildTranslator.cli import logger
 from RSIDBuildTranslator.utils import (
     cleanup_query_df,
     create_ids_to_search,
-    get_query,
     load_gtex_data,
     query_to_df,
     read_input_file,
@@ -24,15 +23,20 @@ def run(args):
         if gtex_con:
             gtex_cur = gtex_con.cursor()
 
-            query = get_query("GTEx_lookup", ids_to_search, "rsid_dbSNP155")
+            # query = get_query("GTEx_lookup", "rsid_dbSNP155", BATCH_SIZE)
 
-            results_df = query_to_df(query, ids_to_search, gtex_cur)
+            # results_df = query_to_df(query, ids_to_search, gtex_cur)
+
+            BATCH_SIZE = 10000
+            results_df = query_to_df(
+                "GTEx_lookup", ids_to_search, "rsid_dbSNP155", gtex_cur, BATCH_SIZE
+            )
 
             final_df = cleanup_query_df(
                 results_df, input_data, args.rsid_col, "rsid_dbSNP155", args.exclude_ref_alt
             )
 
-            print(final_df)
+            print(final_df.head)
             write_ouput_file(final_df, args.output)
 
 
@@ -61,12 +65,12 @@ def make_checks(input_data, rsid_col):
         num_invalid = len(invalid_rsids)
         total_count = len(input_data[rsid_col])
 
-        if num_invalid < total_count:
+        if num_invalid > 0:
             logger.warning(
                 f"Some IDs in rsID column '{rsid_col}' do not match rsID format. "
                 f"{num_invalid}/{total_count} invalid values. First few: {invalid_rsids.head().tolist()}"
             )
-        else:
+        if num_invalid == total_count:
             logger.error(
                 f"IDs in rsID column '{rsid_col}' do not match rsID format. "
                 f"First few invalid values: {invalid_rsids.head().tolist()}"

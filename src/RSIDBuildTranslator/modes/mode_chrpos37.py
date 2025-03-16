@@ -4,7 +4,6 @@ from RSIDBuildTranslator.cli import logger
 from RSIDBuildTranslator.utils import (
     cleanup_query_df,
     create_ids_to_search,
-    get_query,
     load_gtex_data,
     query_to_df,
     read_input_file,
@@ -26,15 +25,18 @@ def run(args):
         if gtex_con:
             gtex_cur = gtex_con.cursor()
 
-            query = get_query("GTEx_lookup", ids_to_search, "chrpos37")
+            # query = get_query("GTEx_lookup", ids_to_search, "chrpos37")
 
-            results_df = query_to_df(query, ids_to_search, gtex_cur)
+            # results_df = query_to_df(query, ids_to_search, gtex_cur)
+
+            BATCH_SIZE = 10000
+            results_df = query_to_df("GTEx_lookup", ids_to_search, "chrpos37", gtex_cur, BATCH_SIZE)
 
             final_df = cleanup_query_df(
                 results_df, input_data, "new_ids", "chrpos37", args.exclude_ref_alt
             )
 
-            print(final_df)
+            print(final_df.head)
             write_ouput_file(final_df, args.output)
 
 
@@ -72,12 +74,12 @@ def make_checks(input_data, chr_col, pos_col):
         num_invalid = invalid_rows.sum()
         total_count = len(input_data)
 
-        if num_invalid < total_count:
+        if num_invalid > 0:
             logger.warning(
                 f"Some rows in chromosome column '{chr_col}' and position column '{pos_col}' do not match correct format. "
                 f"{num_invalid}/{total_count} invalid values. First few: {invalid_rows.head().tolist()}"
             )
-        else:
+        if num_invalid == total_count:
             logger.error(
                 f"Values in chromosome column '{chr_col}' and position column '{pos_col}' do not match correct format. "
                 f"First few invalid values: {invalid_rows.head().tolist()}"
