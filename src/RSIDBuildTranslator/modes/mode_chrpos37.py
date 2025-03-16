@@ -49,20 +49,25 @@ def make_checks(input_data, chr_col, pos_col):
     Returns:
     bool :True if checks pass, or False
     """
-    for col in [chr_col, pos_col]:
-        if col not in input_data.columns:
-            logger.error(f"Column '{col}' does not exist in the input dataframe.")
+    try:
+        for col in [chr_col, pos_col]:
+            if col not in input_data.columns:
+                logger.error(f"Column '{col}' does not exist in the input dataframe.")
+                return False
+            if input_data[col].empty:
+                logger.error(f"Column '{col}' is empty.")
+                return False
+        if not all(
+            re.match(r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", i) for i in input_data[chr_col]
+        ):
+            logger.error(f"Chromosome numbers in '{chr_col}' do not match chr format")
             return False
-        if input_data[col].empty:
-            logger.error(f"Column '{col}' is empty.")
+        if not all(re.match(r"\d+", str(i)) for i in input_data[pos_col]):
+            logger.error(f"Chromosome numbers in '{pos_col}' do not match chr format")
             return False
-    if not all(
-        re.match(r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", i) for i in input_data[chr_col]
-    ):
-        logger.error(f"Chromosome numbers in '{chr_col}' do not match chr format")
+        logger.info(f"Columns '{chr_col}' and '{pos_col}' passed checks ✨")
+        return True
+    except Exception as e:
+        logger.error(f"An error has occured while running make_checks: {e}")
         return False
-    if not all(re.match(r"^\d+$", str(i)) for i in input_data[pos_col]):
-        logger.error(f"Chromosome numbers in '{pos_col}' do not match chr format")
-        return False
-    logger.info(f"Columns '{chr_col}' and '{pos_col}' passed checks ✨")
-    return True
+

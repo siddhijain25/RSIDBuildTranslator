@@ -49,14 +49,34 @@ def make_checks(input_data, rsid_col):
     Returns:
     bool :True if checks pass, or False
     """
-    if rsid_col not in input_data.columns:
-        logger.error(f"rsID column '{rsid_col}' does not exist in the input dataframe.")
+    try:
+        if rsid_col not in input_data.columns:
+            logger.error(f"rsID column '{rsid_col}' does not exist in the input dataframe.")
+            return False
+        if input_data[rsid_col].empty:
+            logger.error(f"rsID column '{rsid_col}' is empty.")
+            return False
+
+        valid_rsids = input_data[rsid_col].dropna().astype(str)
+
+        invalid_rsids = valid_rsids[~valid_rsids.str.match(r"rs[0-9]+", na=False)]
+        num_invalid = len(invalid_rsids)
+        total_count = len(input_data[rsid_col])
+
+        if num_invalid == total_count:
+            logger.error(
+                f"IDs in rsID column '{rsid_col}' do not match rsID format. "
+                f"First few invalid values: {invalid_rsids.head().tolist()}"
+            )
+            return False
+        elif num_invalid > 0:
+            logger.warning(
+                f"Some IDs in rsID column '{rsid_col}' do not match rsID format. "
+                f"{num_invalid}/{total_count} invalid values. First few: {invalid_rsids.head().tolist()}"
+            )
+
+        logger.info(f"rsID column '{rsid_col}' passed checks with {total_count - num_invalid} valid IDs ✨")
+        return True
+    except Exception as e:
+        logger.error(f"An error has occured while running make_checks: {e}")
         return False
-    if input_data[rsid_col].empty:
-        logger.error(f"rsID column '{rsid_col}' is empty.")
-        return False
-    if not all(re.match(r"^rs[0-9]+$", i) for i in input_data[rsid_col]):
-        logger.error(f"IDs in rsID column '{rsid_col}' do not match rsID format")
-        return False
-    logger.info(f"rsID column '{rsid_col}' passed checks ✨")
-    return True
