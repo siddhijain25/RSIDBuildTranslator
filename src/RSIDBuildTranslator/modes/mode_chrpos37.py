@@ -40,11 +40,12 @@ def run(args):
 
 def make_checks(input_data, chr_col, pos_col):
     """
-    Checks if the rsID column specified has rsIDs in the correct format.
+    Checks if the chr and pos columns specified have correct format.
 
     Parameters:
-    ids_to_search (list): The values from rsID column converted to a list.
-    rsid_col (str): Name of the rsID column as provided by user.
+    input_data (pd.DataFrame): Input data.
+    chr_col (str): Name of the chr column as provided by user.
+    pos_col (str): Name of the pos column as provided by user.
 
     Returns:
     bool :True if checks pass, or False
@@ -57,16 +58,35 @@ def make_checks(input_data, chr_col, pos_col):
             if input_data[col].empty:
                 logger.error(f"Column '{col}' is empty.")
                 return False
-        if not all(
-            re.match(r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", i) for i in input_data[chr_col]
-        ):
-            logger.error(f"Chromosome numbers in '{chr_col}' do not match chr format")
+
+        chr_pattern = re.compile(r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", re.IGNORECASE)
+        pos_pattern = re.compile(r"\d+")
+
+        invalid_rows = input_data.apply(
+            lambda row: not (
+                chr_pattern.match(str(row[chr_col])) and pos_pattern.match(str(row[pos_col]))
+            ),
+            axis=1,
+        )
+
+        num_invalid = invalid_rows.sum()
+        total_count = len(input_data)
+
+        if num_invalid < total_count:
+            logger.warning(
+                f"Some rows in chromosome column '{chr_col}' and position column '{pos_col}' do not match correct format. "
+                f"{num_invalid}/{total_count} invalid values. First few: {invalid_rows.head().tolist()}"
+            )
+        else:
+            logger.error(
+                f"Values in chromosome column '{chr_col}' and position column '{pos_col}' do not match correct format. "
+                f"First few invalid values: {invalid_rows.head().tolist()}"
+            )
             return False
-        if not all(re.match(r"\d+", str(i)) for i in input_data[pos_col]):
-            logger.error(f"Chromosome numbers in '{pos_col}' do not match chr format")
-            return False
-        logger.info(f"Columns '{chr_col}' and '{pos_col}' passed checks ✨")
-        return True
+        logger.info(
+            f"Chromosome column '{chr_col}' and position column '{pos_col}' passed checks with {total_count - num_invalid} valid IDs ✨"
+        )
+        return num_invalid < total_count
     except Exception as e:
         logger.error(f"An error has occured while running make_checks: {e}")
         return False

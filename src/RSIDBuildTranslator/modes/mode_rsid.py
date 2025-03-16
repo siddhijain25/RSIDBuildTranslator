@@ -1,4 +1,3 @@
-
 from RSIDBuildTranslator.cli import logger
 from RSIDBuildTranslator.utils import (
     cleanup_query_df,
@@ -42,7 +41,7 @@ def make_checks(input_data, rsid_col):
     Checks if the rsID column specified has rsIDs in the correct format.
 
     Parameters:
-    ids_to_search (list): The values from rsID column converted to a list.
+    input_data (pd.DataFrame): Input data.
     rsid_col (str): Name of the rsID column as provided by user.
 
     Returns:
@@ -58,11 +57,9 @@ def make_checks(input_data, rsid_col):
 
         valid_rsids = input_data[rsid_col].dropna().astype(str)
 
-        invalid_rsids = valid_rsids[~valid_rsids.str.match(r"^rs[0-9]+$", na=False)]
+        invalid_rsids = valid_rsids[~valid_rsids.str.match(r"rs[0-9]+", na=False)]
         num_invalid = len(invalid_rsids)
         total_count = len(input_data[rsid_col])
-
-        print(f"num_invalid: {num_invalid}, total_count: {total_count}")  # Debugging line
 
         if num_invalid < total_count:
             logger.warning(
@@ -83,11 +80,3 @@ def make_checks(input_data, rsid_col):
     except Exception as e:
         logger.error(f"An error has occured while running make_checks: {e}")
         return False
-
-
-# if num_invalid == total_count:
-#     print(num_invalid)
-#     print(invalid_rsids)
-#     print(total_count)
-# elif num_invalid > 0:
-#     print("lol")
