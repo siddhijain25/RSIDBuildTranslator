@@ -38,8 +38,8 @@ RSIDBuildTranslator chrpos38 -h
 | Flag | Description |
 |-|-|
 | -h, --help | Use this flag to retrieve all options and help |
-| -i, --input | The name of the input file, with the path to the file (if required).
-| -o, --output | A name for the output file, with the path where you want to place it (if required).
+| -i, --input | The name of the input file, with the path to the file (if required). The program can read most types of *delimited* files.
+| -o, --output | A name for the output file, with the path where you want to place it (if required). Allowed file extentions are ".txt", ".tsv", and ".csv".
 | --exclude-ref-alt (optional) | Include this flag in the command if you would like to exclude printing the "ref" and "alt" alleles from the databse to your output file. The "ref" and "alt" alleles are printed by default.
 
 ### Mode specific options:
