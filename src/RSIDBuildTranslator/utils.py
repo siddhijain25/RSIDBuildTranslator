@@ -91,6 +91,106 @@ def read_input_file(path):
         return None
 
 
+def make_checks_rsid(input_data, rsid_col):
+    """
+    Checks if the rsID column specified has rsIDs in the correct format.
+
+    Parameters:
+    input_data (pd.DataFrame): Input data.
+    rsid_col (str): Name of the rsID column as provided by user.
+
+    Returns:
+    bool :True if checks pass, or False
+    """
+    try:
+        if rsid_col not in input_data.columns:
+            logger.error(f"rsID column '{rsid_col}' does not exist in the input dataframe.")
+            return False
+        if input_data[rsid_col].empty:
+            logger.error(f"rsID column '{rsid_col}' is empty.")
+            return False
+
+        valid_rsids = input_data[rsid_col].dropna().astype(str)
+
+        invalid_rsids = valid_rsids[~valid_rsids.str.match(r"rs[0-9]+", na=False)]
+        num_invalid = len(invalid_rsids)
+        total_count = len(input_data[rsid_col])
+
+        if num_invalid > 0:
+            logger.warning(
+                f"Some IDs in rsID column '{rsid_col}' do not match rsID format. "
+                f"{num_invalid}/{total_count} invalid values. First few: {invalid_rsids.head().tolist()}"
+            )
+        if num_invalid == total_count:
+            logger.error(
+                f"IDs in rsID column '{rsid_col}' do not match rsID format. "
+                f"First few invalid values: {invalid_rsids.head().tolist()}"
+            )
+            return False
+        logger.info(
+            f"rsID column '{rsid_col}' passed checks with {total_count - num_invalid} valid IDs ✨"
+        )
+        return num_invalid < total_count
+
+    except Exception as e:
+        logger.error(f"An error has occured while running make_checks: {e}")
+        return False
+
+
+def make_checks_chrpos(input_data, chr_col, pos_col):
+    """
+    Checks if the chr and pos columns specified have correct format.
+
+    Parameters:
+    input_data (pd.DataFrame): Input data.
+    chr_col (str): Name of the chr column as provided by user.
+    pos_col (str): Name of the pos column as provided by user.
+
+    Returns:
+    bool :True if checks pass, or False
+    """
+    try:
+        for col in [chr_col, pos_col]:
+            if col not in input_data.columns:
+                logger.error(f"Column '{col}' does not exist in the input dataframe.")
+                return False
+            if input_data[col].empty:
+                logger.error(f"Column '{col}' is empty.")
+                return False
+
+        chr_pattern = re.compile(r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", re.IGNORECASE)
+        pos_pattern = re.compile(r"\d+")
+
+        invalid_rows = input_data.apply(
+            lambda row: not (
+                chr_pattern.match(str(row[chr_col])) and pos_pattern.match(str(row[pos_col]))
+            ),
+            axis=1,
+        )
+
+        num_invalid = invalid_rows.sum()
+        total_count = len(input_data)
+
+        if num_invalid > 0:
+            logger.warning(
+                f"Some rows in chromosome column '{chr_col}' and position column '{pos_col}' do not match correct format. "
+                f"{num_invalid}/{total_count} invalid values. First few: {invalid_rows.head().tolist()}"
+            )
+        if num_invalid == total_count:
+            logger.error(
+                f"Values in chromosome column '{chr_col}' and position column '{pos_col}' do not match correct format. "
+                f"First few invalid values: {invalid_rows.head().tolist()}"
+            )
+            return False
+        logger.info(
+            f"Chromosome column '{chr_col}' and position column '{pos_col}' passed checks with {total_count - num_invalid} valid IDs ✨"
+        )
+        return num_invalid < total_count
+    except Exception as e:
+        logger.error(f"An error has occured while running make_checks: {e}")
+        return False
+
+
 def create_ids_to_search(input_data, colnames):
     """
     Creates a list of ids that will be later used to query the SQL database.
