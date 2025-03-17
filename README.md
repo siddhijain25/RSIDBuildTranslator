@@ -66,7 +66,7 @@ RSIDBuildTranslator chrpos38 -h
 
 ## Examples
 
-Example for running RSIDBuildTranslator in mode **rsid**.
+Example for running RSIDBuildTranslator in mode **`rsid`**.
 
 ```bash
 >head test_data1.txt 
@@ -96,7 +96,7 @@ Output file head:
 
 ```
 
-Example for running RSIDBuildTranslator in mode **chrpos37**.
+Example for running RSIDBuildTranslator in mode **`chrpos37`**.
 
 ```bash
 >head test_data2.tsv 
@@ -127,7 +127,7 @@ Output file head:
 
 ```
 
-Example for running RSIDBuildTranslator in mode **chrpos38**. Here the flag `--exclude-ref-alt` is used to demonstrate its purpose.
+Example for running RSIDBuildTranslator in mode **`chrpos38`**. Here the flag `--exclude-ref-alt` is used to demonstrate its purpose.
 
 ```bash
 >head test_data1.txt 
