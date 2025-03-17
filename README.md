@@ -70,12 +70,12 @@ Example for running RSIDBuildTranslator in mode **rsid**.
 
 ```bash
 >head test_data1.txt 
-#CHROM	POS	ID	REF	ALT	A1	A1_FREQ	TEST	OBS_CT	BETA	SE	T_STAT	P	ERRCODE
-7	127741848	rs116944008	C	T	T	0.0260641	ADD	7213	-0.0243852	0.052663	-0.463043	0.643348	.
-7	127742101	rs17151229	G	C	C	0.337446	ADD	7213	0.000517255	0.0174181	0.0296964	0.97631	.
-7	127742115	rs75008380	A	G	G	0.0641897	ADD	7213	0.0197173	0.0337571	0.584095	0.559175	.
-7	127742211	rs6467145	G	A	G	0.409053	ADD	7213	0.0343268	0.0168576	2.03628	0.0417584	.
-7	127742689	rs17151241	A	G	G	0.407597	ADD	7213	0.0340739	0.0168882	2.01762	0.0436681	.
+ID	REF	ALT	A1	A1_FREQ	TEST	OBS_CT	BETA	SE	T_STAT	P	ERRCODE
+rs116944008	C	T	T	0.0260641	ADD	7213	-0.0243852	0.052663	-0.463043	0.643348	.
+rs17151229	G	C	C	0.337446	ADD	7213	0.000517255	0.0174181	0.0296964	0.97631	.
+rs75008380	A	G	G	0.0641897	ADD	7213	0.0197173	0.0337571	0.584095	0.559175	.
+rs6467145	G	A	G	0.409053	ADD	7213	0.0343268	0.0168576	2.03628	0.0417584	.
+rs17151241	A	G	G	0.407597	ADD	7213	0.0340739	0.0168882	2.01762	0.0436681	.
 
 >RSIDBuildTranslator rsid -i test_data1.txt -o test_out1.txt -rs ID
 2025-03-17 11:58:01,214 - INFO - Running tool in mode: 'rsid'
@@ -86,13 +86,44 @@ Example for running RSIDBuildTranslator in mode **rsid**.
 2025-03-17 11:58:01,234 - INFO - Data cleaned and merged successfully.
 Output file head:
 
-   CHROM        POS           ID REF ALT A1   A1_FREQ TEST  OBS_CT      BETA        SE    T_STAT         P ERRCODE chr37      pos37 chr38      pos38 ref alt
-0      7  127741848  rs116944008   C   T  T  0.026064  ADD    7213 -0.024385  0.052663 -0.463043  0.643348       .     7  127381902     7  127741848   C   T
-1      7  127742101   rs17151229   G   C  C  0.337446  ADD    7213  0.000517  0.017418  0.029696  0.976310       .     7  127382155     7  127742101   G   C
-2      7  127742115   rs75008380   A   G  G  0.064190  ADD    7213  0.019717  0.033757  0.584095  0.559175       .     7  127382169     7  127742115   A   G
-3      7  127742211    rs6467145   G   A  G  0.409053  ADD    7213  0.034327  0.016858  2.036280  0.041758       .     7  127382265     7  127742211   G   A
-4      7  127742689   rs17151241   A   G  G  0.407597  ADD    7213  0.034074  0.016888  2.017620  0.043668       .     7  127382743     7  127742689   A   G
+ID REF ALT A1   A1_FREQ TEST  OBS_CT      BETA        SE    T_STAT         P ERRCODE chr37      pos37 chr38      pos38 ref alt
+0   rs116944008   C   T  T  0.026064  ADD    7213 -0.024385  0.052663 -0.463043  0.643348       .     7  127381902     7  127741848   C   T
+1   rs17151229   G   C  C  0.337446  ADD    7213  0.000517  0.017418  0.029696  0.976310       .     7  127382155     7  127742101   G   C
+2   rs75008380   A   G  G  0.064190  ADD    7213  0.019717  0.033757  0.584095  0.559175       .     7  127382169     7  127742115   A   G
+3   rs6467145   G   A  G  0.409053  ADD    7213  0.034327  0.016858  2.036280  0.041758       .     7  127382265     7  127742211   G   A
+4   rs17151241   A   G  G  0.407597  ADD    7213  0.034074  0.016888  2.017620  0.043668       .     7  127382743     7  127742689   A   G
 2025-03-17 11:58:01,239 - INFO - Output file successfully written to 'test_out1.txt' with tab as delimiter.
+
+```
+
+Example for running RSIDBuildTranslator in mode **chrpos37**.
+
+```bash
+>head test_data2.tsv 
+variant_id	p_value	chromosome	base_pair_location	effect_allele	other_allele	effect_allele_frequency	beta	standard_error
+rs117086422	0.400799342119828	1	845635	T	C	0.202	-0.0171282	0.0203843
+rs57760052	0.404075947534627	1	845938	A	G	0.2036	-0.0169644	0.0203305
+rs28612348	0.35851555231626	1	846078	T	C	0.1952	-0.0189615	0.020649
+rs58781670	0.294246292876486	1	846398	A	G	0.203	-0.0213219	0.0203268
+rs4475691	0.362153761210013	1	846808	T	C	0.1977	-0.0187402	0.0205631
+
+>RSIDBuildTranslator chrpos37 -i test_data2.tsv -o test_out2.tsv -chr37 chromosome -pos37 base_pair_location
+2025-03-17 14:14:19,213 - INFO - Running tool in mode: 'chrpos37'
+2025-03-17 14:14:19,215 - INFO - Input file 'test_data2.tsv' read successfully.
+2025-03-17 14:14:19,216 - INFO - Chromosome column 'chromosome' and position column 'base_pair_location' passed checks with 99 valid IDs ✨
+2025-03-17 14:14:19,216 - INFO - GTEx database read successfully.
+2025-03-17 14:14:19,224 - INFO - Processed entries 1 to 99...
+2025-03-17 14:14:19,227 - INFO - Data cleaned and merged successfully.
+Output file head:
+
+    variant_id   p_value  chromosome  base_pair_location effect_allele other_allele  ...  standard_error  rsid_dbSNP155  chr38   pos38 ref alt
+0  rs117086422  0.400799           1              845635             T            C  ...        0.020384    rs117086422      1  910255   C   T
+1   rs57760052  0.404076           1              845938             A            G  ...        0.020331     rs57760052      1  910558   G   A
+2   rs28612348  0.358516           1              846078             T            C  ...        0.020649     rs28612348      1  910698   C   T
+3   rs58781670  0.294246           1              846398             A            G  ...        0.020327     rs58781670      1  911018   G   A
+4    rs4475691  0.362154           1              846808             T            C  ...        0.020563      rs4475691      1  911428   C   T
+
+2025-03-17 14:14:19,232 - INFO - Output file successfully written to 'test_out2.tsv' with tab as delimiter.
 
 ```
 
