@@ -100,12 +100,12 @@ Example for running RSIDBuildTranslator in mode **chrpos37**.
 
 ```bash
 >head test_data2.tsv 
-variant_id	p_value	chromosome	base_pair_location	effect_allele	other_allele	effect_allele_frequency	beta	standard_error
-rs117086422	0.400799342119828	1	845635	T	C	0.202	-0.0171282	0.0203843
-rs57760052	0.404075947534627	1	845938	A	G	0.2036	-0.0169644	0.0203305
-rs28612348	0.35851555231626	1	846078	T	C	0.1952	-0.0189615	0.020649
-rs58781670	0.294246292876486	1	846398	A	G	0.203	-0.0213219	0.0203268
-rs4475691	0.362153761210013	1	846808	T	C	0.1977	-0.0187402	0.0205631
+p_value	chromosome	base_pair_location	effect_allele	other_allele	effect_allele_frequency	beta	standard_error
+0.400799342119828	1	845635	T	C	0.202	-0.0171282	0.0203843
+0.404075947534627	1	845938	A	G	0.2036	-0.0169644	0.0203305
+0.35851555231626	1	846078	T	C	0.1952	-0.0189615	0.020649
+0.294246292876486	1	846398	A	G	0.203	-0.0213219	0.0203268
+0.362153761210013	1	846808	T	C	0.1977	-0.0187402	0.0205631
 
 >RSIDBuildTranslator chrpos37 -i test_data2.tsv -o test_out2.tsv -chr37 chromosome -pos37 base_pair_location
 2025-03-17 14:14:19,213 - INFO - Running tool in mode: 'chrpos37'
@@ -116,12 +116,12 @@ rs4475691	0.362153761210013	1	846808	T	C	0.1977	-0.0187402	0.0205631
 2025-03-17 14:14:19,227 - INFO - Data cleaned and merged successfully.
 Output file head:
 
-    variant_id   p_value  chromosome  base_pair_location effect_allele other_allele  ...  standard_error  rsid_dbSNP155  chr38   pos38 ref alt
-0  rs117086422  0.400799           1              845635             T            C  ...        0.020384    rs117086422      1  910255   C   T
-1   rs57760052  0.404076           1              845938             A            G  ...        0.020331     rs57760052      1  910558   G   A
-2   rs28612348  0.358516           1              846078             T            C  ...        0.020649     rs28612348      1  910698   C   T
-3   rs58781670  0.294246           1              846398             A            G  ...        0.020327     rs58781670      1  911018   G   A
-4    rs4475691  0.362154           1              846808             T            C  ...        0.020563      rs4475691      1  911428   C   T
+    p_value  chromosome  base_pair_location effect_allele other_allele  ...  standard_error  rsid_dbSNP155  chr38   pos38 ref alt
+0  0.400799           1              845635             T            C  ...        0.020384    rs117086422      1  910255   C   T
+1   0.404076           1              845938             A            G  ...        0.020331     rs57760052      1  910558   G   A
+2   0.358516           1              846078             T            C  ...        0.020649     rs28612348      1  910698   C   T
+3   0.294246           1              846398             A            G  ...        0.020327     rs58781670      1  911018   G   A
+4    0.362154           1              846808             T            C  ...        0.020563      rs4475691      1  911428   C   T
 
 2025-03-17 14:14:19,232 - INFO - Output file successfully written to 'test_out2.tsv' with tab as delimiter.
 
