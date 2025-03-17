@@ -86,7 +86,7 @@ rs17151241	A	G	G	0.407597	ADD	7213	0.0340739	0.0168882	2.01762	0.0436681	.
 2025-03-17 11:58:01,234 - INFO - Data cleaned and merged successfully.
 Output file head:
 
-ID REF ALT A1   A1_FREQ TEST  OBS_CT      BETA        SE    T_STAT         P ERRCODE chr37      pos37 chr38      pos38 ref alt
+    ID REF ALT A1   A1_FREQ TEST  OBS_CT      BETA        SE    T_STAT         P ERRCODE chr37      pos37 chr38      pos38 ref alt
 0   rs116944008   C   T  T  0.026064  ADD    7213 -0.024385  0.052663 -0.463043  0.643348       .     7  127381902     7  127741848   C   T
 1   rs17151229   G   C  C  0.337446  ADD    7213  0.000517  0.017418  0.029696  0.976310       .     7  127382155     7  127742101   G   C
 2   rs75008380   A   G  G  0.064190  ADD    7213  0.019717  0.033757  0.584095  0.559175       .     7  127382169     7  127742115   A   G
