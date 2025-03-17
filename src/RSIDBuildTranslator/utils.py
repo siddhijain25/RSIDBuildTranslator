@@ -208,7 +208,7 @@ def create_ids_to_search(input_data, colnames):
             return ids_to_search
         else:
             input_data["new_ids"] = (
-                input_data[colnames[0]].str.extract(
+                input_data[colnames[0]].astype(str).str.extract(
                     r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", expand=False
                 )
                 + "_"
