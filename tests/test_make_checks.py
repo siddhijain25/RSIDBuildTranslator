@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from RSIDBuildTranslator.utils import make_checks_rsid,make_checks_chrpos
+from RSIDBuildTranslator.utils import make_checks_chrpos, make_checks_rsid
 
 
 @pytest.mark.parametrize(

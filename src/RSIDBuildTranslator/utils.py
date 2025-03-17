@@ -273,7 +273,7 @@ def query_to_df(table_name, ids_to_search, lookup_column, cur, batch_size):
             cur.execute(query, batch)
             columns = [desc[0] for desc in cur.description]
             results.extend([dict(zip(columns, row, strict=False)) for row in cur.fetchall()])
-            logger.info(f"Processed entries {i} to {i + len(batch) - 1}...")
+            logger.info(f"Processed entries {i+1} to {i + len(batch)}...")
 
         return pd.DataFrame(results)
     except Exception as e:

@@ -30,5 +30,6 @@ def run(args):
                 results_df, input_data, "new_ids", "chrpos38", args.exclude_ref_alt
             )
 
-            print(final_df.head)
+            print("Output file head:\n")
+            print(final_df.head())
             write_ouput_file(final_df, args.output)

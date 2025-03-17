@@ -3,3 +3,4 @@ RSIDBuildTranslator.log
 .DS_Store
 .ruff_cache/
 dist/
+src/RSIDBuildTranslator/data/
