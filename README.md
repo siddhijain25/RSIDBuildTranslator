@@ -107,21 +107,21 @@ Example for running RSIDBuildTranslator in mode **chrpos38**.
 7	127742211	rs6467145	G	A	G	0.409053	ADD	7213	0.0343268	0.0168576	2.03628	0.0417584	.
 7	127742689	rs17151241	A	G	G	0.407597	ADD	7213	0.0340739	0.0168882	2.01762	0.0436681	.
 
->RSIDBuildTranslator chrpos38 -i test_data1.txt -o test_out2.txt -chr38 chr -pos38 pos
-2025-03-17 11:50:17,009 - INFO - Running tool in mode: 'chrpos38'
-2025-03-17 11:50:17,011 - INFO - Input file 'test_data1.txt' read successfully.
-2025-03-17 11:50:17,012 - INFO - Chromosome column 'CHROM' and position column 'POS' passed checks with 49 valid IDs ✨
-2025-03-17 11:50:17,012 - INFO - GTEx database read successfully.
-2025-03-17 11:50:17,013 - INFO - Processed entries 1 to 49...
-2025-03-17 11:50:17,015 - INFO - Data cleaned and merged successfully.
+>RSIDBuildTranslator chrpos38 -i test_data1.txt -o test_out2.txt -chr38 CHROM -pos38 POS --exclude-ref-alt
+2025-03-17 12:00:43,582 - INFO - Running tool in mode: 'chrpos38'
+2025-03-17 12:00:43,584 - INFO - Input file 'test_data1.txt' read successfully.
+2025-03-17 12:00:43,585 - INFO - Chromosome column 'CHROM' and position column 'POS' passed checks with 49 valid IDs ✨
+2025-03-17 12:00:43,586 - INFO - GTEx database read successfully.
+2025-03-17 12:00:43,587 - INFO - Processed entries 1 to 49...
+2025-03-17 12:00:43,589 - INFO - Data cleaned and merged successfully.
 Output file head:
 
-   CHROM        POS           ID REF ALT A1   A1_FREQ TEST  OBS_CT      BETA        SE    T_STAT         P ERRCODE rsid_dbSNP155 chr37      pos37 ref alt
-0      7  127741848  rs116944008   C   T  T  0.026064  ADD    7213 -0.024385  0.052663 -0.463043  0.643348       .   rs116944008     7  127381902   C   T
-1      7  127742101   rs17151229   G   C  C  0.337446  ADD    7213  0.000517  0.017418  0.029696  0.976310       .    rs17151229     7  127382155   G   C
-2      7  127742115   rs75008380   A   G  G  0.064190  ADD    7213  0.019717  0.033757  0.584095  0.559175       .    rs75008380     7  127382169   A   G
-3      7  127742211    rs6467145   G   A  G  0.409053  ADD    7213  0.034327  0.016858  2.036280  0.041758       .     rs6467145     7  127382265   G   A
-4      7  127742689   rs17151241   A   G  G  0.407597  ADD    7213  0.034074  0.016888  2.017620  0.043668       .    rs17151241     7  127382743   A   G
-2025-03-17 11:50:17,020 - INFO - Output file successfully written to 'test_out2.txt' with tab as delimiter.
+   CHROM        POS           ID REF ALT A1   A1_FREQ TEST  OBS_CT      BETA        SE    T_STAT         P ERRCODE rsid_dbSNP155 chr37      pos37
+0      7  127741848  rs116944008   C   T  T  0.026064  ADD    7213 -0.024385  0.052663 -0.463043  0.643348       .   rs116944008     7  127381902
+1      7  127742101   rs17151229   G   C  C  0.337446  ADD    7213  0.000517  0.017418  0.029696  0.976310       .    rs17151229     7  127382155
+2      7  127742115   rs75008380   A   G  G  0.064190  ADD    7213  0.019717  0.033757  0.584095  0.559175       .    rs75008380     7  127382169
+3      7  127742211    rs6467145   G   A  G  0.409053  ADD    7213  0.034327  0.016858  2.036280  0.041758       .     rs6467145     7  127382265
+4      7  127742689   rs17151241   A   G  G  0.407597  ADD    7213  0.034074  0.016888  2.017620  0.043668       .    rs17151241     7  127382743
+2025-03-17 12:00:43,593 - INFO - Output file successfully written to 'test_out2.txt' with tab as delimiter.
 
 ```
