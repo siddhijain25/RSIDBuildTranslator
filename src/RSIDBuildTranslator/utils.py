@@ -208,9 +208,9 @@ def create_ids_to_search(input_data, colnames):
             return ids_to_search
         else:
             input_data["new_ids"] = (
-                input_data[colnames[0]].astype(str).str.extract(
-                    r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", expand=False
-                )
+                input_data[colnames[0]]
+                .astype(str)
+                .str.extract(r"(?i)\b(?:chr)?(1[0-9]?|2[0-2]?|[1-9]|X|Y)\b", expand=False)
                 + "_"
                 + input_data[colnames[1]].astype(str)
             )
@@ -273,7 +273,7 @@ def query_to_df(table_name, ids_to_search, lookup_column, cur, batch_size):
             cur.execute(query, batch)
             columns = [desc[0] for desc in cur.description]
             results.extend([dict(zip(columns, row, strict=False)) for row in cur.fetchall()])
-            logger.info(f"Processed entries {i+1} to {i + len(batch)}...")
+            logger.info(f"Processed entries {i + 1} to {i + len(batch)}...")
 
         return pd.DataFrame(results)
     except Exception as e:
