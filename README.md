@@ -96,7 +96,7 @@ Output file head:
 
 ```
 
-Example for running RSIDBuildTranslator in mode **chrpos38**.
+Example for running RSIDBuildTranslator in mode **chrpos38**. Here the flag `--exclude-ref-alt` is used to demonstrate its purpose.
 
 ```bash
 >head test_data1.txt 
