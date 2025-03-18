@@ -17,6 +17,8 @@ The latest version can be installed using pip, and requires Python version >=3.1
 
 `pip install RSIDBuildTranslator`
 
+The tool automatically downloads the required database on first usage.
+
 ## Usage
 
 Once installed, you can call the program from the command line for viewing all options available.
