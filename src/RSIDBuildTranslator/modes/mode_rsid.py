@@ -23,7 +23,7 @@ def run(args):
         if gtex_con:
             gtex_cur = gtex_con.cursor()
 
-            BATCH_SIZE = 10000
+            BATCH_SIZE = 500
             results_df = query_to_df(
                 "GTEx_lookup", ids_to_search, "rsid_dbSNP155", gtex_cur, BATCH_SIZE
             )
