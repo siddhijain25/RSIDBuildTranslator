@@ -368,7 +368,7 @@ def split_and_drop_columns(df, col_to_split, new_col_1, new_col_2):
         return None
 
 
-def write_ouput_file(final_df, path):
+def write_output_file(final_df, path):
     """
     Writes the final data to a file with the appropriate format based on the file extension.
 

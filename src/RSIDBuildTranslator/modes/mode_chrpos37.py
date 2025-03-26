@@ -5,7 +5,7 @@ from RSIDBuildTranslator.utils import (
     make_checks_chrpos,
     query_to_df,
     read_input_file,
-    write_ouput_file,
+    write_output_file,
 )
 
 
@@ -32,4 +32,4 @@ def run(args):
 
             print("Output file head:\n")
             print(final_df.head())
-            write_ouput_file(final_df, args.output)
+            write_output_file(final_df, args.output)
